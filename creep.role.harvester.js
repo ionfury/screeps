@@ -8,12 +8,6 @@ function creepEnergyAtCapacity(creep) {
 }
 
 
-
-let salvage = new Task('salvage', {})
-  .when(c => c.carry.energy < c.carryCapacity 
-    && c.pos.findInRange(FIND_DROPPED_RESOURCES, 1).length > 0)
-  .until(c => c.carry.energy == c.carryCapacity);
-
 let get = new Task('getEnergy', {useContainer: false, useSource: true})
   .when((s) => s.carry.energy < s.carryCapacity)
   .until(c => c.carry.energy == c.carryCapacity);
@@ -39,7 +33,7 @@ let upgrade = new Task('upgrade')
 module.exports = {
   name: name,
   body: body,
-  tasks: [salvage, get, fill],
+  tasks: [get, fill],
   options: options,
   spawn: spawn
 };
