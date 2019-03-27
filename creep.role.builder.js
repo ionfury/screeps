@@ -27,7 +27,7 @@ module.exports = {
   spawn: spawn
 };
 
-function body(options) {
+function body(budget) {
   let body = [WORK, MOVE, CARRY];
   
   while(utils.cost(body)+ BODYPART_COST[CARRY] + BODYPART_COST[MOVE] + BODYPART_COST[WORK] <= budget){

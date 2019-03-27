@@ -21,7 +21,12 @@ function run(creep) {
     }
     else {
       let execution = executionFactory.create(taskName);
-      execution.run(creep, options);
+      try {
+        execution.run(creep, options);
+      }
+      catch (ex) {
+        console.log(creep.name, ex);
+      }
     }
   }
   else {
