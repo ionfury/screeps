@@ -47,7 +47,7 @@ function spawn(options){
     .reduce((acc, role) => (acc[role] = (acc[role] || 0) + 1, acc), {});
   let count = creepsInRoom[name] || 0;
   let containers = room.find(FIND_STRUCTURES, {
-    filter: o=>o.structureType==STRUCTURECONTAINER
+    filter: o=>o.structureType==STRUCTURE_CONTAINER
   }).length;
   return count < containers * 2;
 }
