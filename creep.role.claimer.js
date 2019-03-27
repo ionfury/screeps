@@ -8,7 +8,7 @@ let getEnergy = new Task('getEnergy', {useContainer: true, useSource: true})
   .until(c => c.carry.energy == c.carryCapacity);
 
 let go = new Task('goToRoom', {destination: 'target'})
-  .when(c => c.carry.energy == c.carryCapacity && !Game.rooms[c.memory['target']].my)
+  .when(c => c.carry.energy == c.carryCapacity && !Game.rooms[c.memory['target']])
   .until(c => c.room.name != c.memory['target']);
 
 let claim = new Task('claim')
@@ -51,7 +51,7 @@ function options(options) {
     role: name,
     spawnId: options.spawnId,
     home: home.name,
-    target: Game.flags.Claim.room
+    target: Game.flags.Claim.pos.roomName
   }};
 }
 
