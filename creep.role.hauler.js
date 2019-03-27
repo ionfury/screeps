@@ -5,11 +5,12 @@ const name = 'hauler';
 
 let salvage = new Task('salvage', {})
   .when(c => c.carry.energy < c.carry.capacity 
-    && self.room.find(FIND_DROPPED_ENERGY).length > 0)
+    && self.room.find(FIND_DROPPED_RESOURCES).length > 0)
   .until(c => c.carry.energy == c.carrycapacity);
 
 let get = new Task('getEnergy', {useContainer: true, useSource:false})
-  .when(s => s.carry.energy < s.carryCapacity)
+  .when(s => s.carry.energy < s.carryCapacity
+    && self.room.find(FIND_DROPPED_RESOURCES).length == 0)
   .until(s => s.carry.energy == s.carryCapacity);
 
 let store = new Task('storeEnergy', {structureTypes: [STRUCTURE_SPAWN,STRUCTURE_EXTENSION,STRUCTURE_TOWER]})
