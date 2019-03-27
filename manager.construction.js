@@ -117,7 +117,7 @@ function planContainersForSources(room) {
       let struct = room.lookForAt(LOOK_STRUCTURES, p.x, p.y);
       let terrain = room.lookForAt(LOOK_TERRAIN, p.x, p.y);
       let sites = room.lookForAt(LOOK_CONSTRUCTION_SITES, p.x, p.y);
-      
+
       return !!struct && !!sites && terrain == 'plain';
     });
 
@@ -126,7 +126,7 @@ function planContainersForSources(room) {
     switch(code) {
       case OK:
         logger.notify(`Building Container @ ${open}.`);
-        room.memory.sourceContainerPlanned[source.id] = true;
+        room.memory.sourceContainerPlanned[source.id] = {x:open.x, y:open.y};
         break;
       default:
         logger.notify(`${room.name}: Cannot place container @ ${open}:`, {code: code});
