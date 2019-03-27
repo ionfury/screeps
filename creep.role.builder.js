@@ -10,6 +10,10 @@ let build = new Task('build')
   .when(s => s.carry.energy == s.carryCapacity && s.room.find(FIND_CONSTRUCTION_SITES))
   .until(s => s.carry.energy == 0 || !s.room.find(FIND_CONSTRUCTION_SITES))
 
+let repair = new Task('repair')
+  .when(s.carry.energy == s.carryCapacity && s.room.find(FIND_STRUCTURES, { filter: o => o.structureType === STRUCTURE_ROAD && (o.hits > o.hitsMax / 3)}))
+  .until(s.carry.energy == 0 || !s.room.find(FIND_STRUCTURES, { filter: o => o.structureType === STRUCTURE_ROAD && (o.hits > o.hitsMax / 3)}));
+
 let upgrade = new Task('upgrade')
   .when(s => s.carry.energy == s.carryCapacity && !s.room.find(FIND_CONSTRUCTION_SITES))
   .until(s => s.carry.energy == 0);
@@ -17,7 +21,7 @@ let upgrade = new Task('upgrade')
 module.exports = {
   name: name,
   body: body,
-  tasks: [get, build, upgrade],
+  tasks: [get, build, repair, upgrade],
   options: options,
   spawn: spawn
 };
