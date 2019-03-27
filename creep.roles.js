@@ -1,5 +1,6 @@
 let all = [
   'hauler',
+  'remoteHarvester',
   'builder',
   'upgrader',
   'harvester'
