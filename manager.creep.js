@@ -4,7 +4,7 @@ let logger = require('constant.logger');
 
 const say = false;
 
-const debugName = 'claimer_1lk95h5amgng';
+const debugName = '';
 
 module.exports = {
   run: run
