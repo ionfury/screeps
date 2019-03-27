@@ -26,6 +26,9 @@ function run(creep) {
       if(debugName == creep.name)
         console.log(`  task:${taskName}`)
       if(role.tasks.find(t => t.name === taskName).end(creep)) {
+        
+        if(debugName == creep.name)
+          console.log(`  ending task:${taskName}`)
         creep.memory.task = undefined;
       }
       else {
