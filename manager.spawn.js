@@ -11,6 +11,7 @@ module.exports = {
 function spawn(self) {
   if(self.spawning) return;
   if(self.energy < self.energyCapacity) return;
+  if(spawn.memory.queue == undefined) spawn.memory.queue = [];
 
   roles.types.forEach(type => {
     let role = roleFactory.create(type);
