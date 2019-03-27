@@ -31,7 +31,15 @@ module.exports = {
 }
 
 function body(budget) {
-  return [MOVE, MOVE, CARRY, CARRY, WORK];
+  let body = [WORK, MOVE, CARRY];
+  
+/*  while(utils.cost(body)+ BODYPART_COST[CARRY] + BODYPART_COST[MOVE] + BODYPART_COST[WORK] <= budget){
+    body.push(CARRY);
+    body.push(MOVE);
+    body.push(WORK);
+  }
+*/
+  return body;
 }
 
 function options(options) {
