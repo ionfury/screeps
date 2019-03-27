@@ -6,7 +6,8 @@ const name = 'hauler';
 let salvage = new Task('salvage', {})
   .when(c => c.carry.energy < c.carryCapacity 
     && c.room.find(FIND_DROPPED_RESOURCES).length > 0)
-  .until(c => c.carry.energy == c.carryCapacity);
+  .until(c => c.carry.energy == c.carryCapacity
+    || c.room.find(FIND_DROPPED_RESOURCES).length == 0);
 
 let get = new Task('getEnergy', {useContainer: true, useSource:false})
   .when(s => s.carry.energy < s.carryCapacity
