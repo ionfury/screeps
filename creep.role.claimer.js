@@ -1,0 +1,53 @@
+let Task = require('task');
+let utils = require ('constant.utilities');
+
+const name = 'claimer';
+
+let getEnergy = new Task('getEnergy', {useContainer: true, useSource: true})
+  .when(c => c.carry.energy < c.carryCapacity && c.room.name == c.memory['home'])
+  .until(c => c.carry.energy == c.carryCapacity);
+
+let go = new Task('goToRoom', {destination: 'target'})
+  .when(c => c.carry.energy < c.carry.capacity && !Game.rooms[c.memory['target']].my)
+  .until(c => c.room.name != c.memory['target']);
+
+let claim = new Task('claim')
+  .when(c => c.carry.energy == c.carry.capacity 
+    && c.room.name == c.memory['target'])
+  .until(c => c.carry.energy == 0
+    || Game.rooms[c.memory['target']].my)
+
+let home = new Task('goHome')
+  .when(c => c.carry.energy == 0
+    && c.room.name == c.memory['target'])
+  .until(c => c.room.name == Game.getObjectById(self.memory.spawnId).room.name)
+
+module.exports = {
+  name: name,
+  body: body,
+  tasks: [getEnergy, go, claim, home],
+  options: options,
+  spawn: spawn
+}
+
+function body(budget) {
+  return [MOVE, MOVE, CARRY, CARRY, WORK];
+}
+
+function options(options) {
+  let spawn = Game.getObjectById(options.spawnId);
+  let home = spawn.room;
+  
+  return {memory:
+  {
+    role: name,
+    spawnId: options.spawnId,
+    home: home.name,
+    target: options.target
+  }};
+}
+
+function spawn(options) {
+  return false;
+}
+
