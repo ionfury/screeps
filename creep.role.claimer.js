@@ -9,8 +9,8 @@ let getEnergy = new Task('getEnergy', {useContainer: true, useSource: true})
 
 let go = new Task('goToRoom', {destination: 'target'})
   .when(c => c.carry.energy == c.carryCapacity && c.room.name != [c.memory['target']])
-//  .until(c => c.room.name == c.memory['target']);
-  .until(c => c.pos.findPathTo(Game.rooms[c.memory['target']].controller).length > 0)
+  .until(c => c.room.name == c.memory['target']);
+  //.until(c => c.pos.findPathTo(Game.rooms[c.memory['target']].controller).length > 0)
 
 let claim = new Task('claim')
   .when(c => c.carry.energy == c.carryCapacity 
