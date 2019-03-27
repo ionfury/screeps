@@ -62,5 +62,5 @@ function spawn(options){
     .map(c => c.memory.role)
     .reduce((acc, role) => (acc[role] = (acc[role] || 0) + 1, acc), {});
   let harvesterCount = creepsInRoom[name] || 0;
-  return harvesterCount < 4;
+  return harvesterCount < room.find(FIND_SOURCES).length;
 }

@@ -13,7 +13,6 @@ function spawn(self) {
   if(self.energy < self.energyCapacity) return;
 
   roles.types.forEach(type => {
-    logger.notify(`${type} spawning...`, {write:debug})
     let role = roleFactory.create(type);
     if(role.spawn({spawnId: self.id})) {
       let name = `${type}_${Math.random().toString(26).slice(2)}`;
