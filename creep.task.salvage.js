@@ -3,7 +3,7 @@ module.exports = {
 }
 
 function salvage(self, options) {
-  let droppedEnergy = self.pos.findClosestByPath(FIND_DROPPED_ENERGY, {
+  let droppedEnergy = self.pos.findClosestByPath(FIND_DROPPED_RESOURCES, {
     filter: e => e.resourceType == RESOURCE_ENERGY
   });
 
