@@ -41,7 +41,7 @@ function run(creep) {
       let task = role.tasks.find(t => t.ready(creep));
       if(task) {
         if(debugName == creep.name)
-          console.log(`task found: ${task.name}`)
+          console.log(`  task found: ${task.name}`)
         creep.memory.task = task.name;
         creep.memory.options = task.options;
       }
