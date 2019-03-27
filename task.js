@@ -6,6 +6,8 @@ class Task {
     this._until = () => false;
   }
 
+  execute(creep, options){}
+
   when(fn) {
     this._when = fn;
     return this;

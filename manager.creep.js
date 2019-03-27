@@ -17,7 +17,7 @@ function run(creep) {
   
   if(taskName) {
     if(role.tasks.find(t => t.name === taskName).end(creep)) {
-      creep.memory.task = undefined;
+      creep.memory.task = role.tasks.find(t => t.ready(creep)).name;
     }
     else {
       let execution = executionFactory.create(taskName);
