@@ -9,3 +9,4 @@ function goToRoom(self, options) {
     let exit = self.pos.findClosestByRange(route[0].exit);
     self.moveTo(exit);  
   }
+}
