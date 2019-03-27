@@ -36,6 +36,6 @@ function run(creep) {
     }
   }
   catch (ex) {
-    console.log(`${creep.name} error while running ${taskName}:`, ex);
+    console.log(`"${creep.name}" error while running "${taskName}":`, ex);
   }
 }
