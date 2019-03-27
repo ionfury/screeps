@@ -1,6 +1,7 @@
 module.exports = {
   setDefaults: setDefaults,
-  cost: cost
+  cost: cost,
+  cleanMemory: cleanMemory
 }
 
 function setDefaults(options, defaults) {
@@ -9,4 +10,13 @@ function setDefaults(options, defaults) {
 
 function cost(body){
   return body.reduce((cost, part) => cost + BODYPART_COST[part], 0);
+}
+
+function cleanMemory(){
+  console.log("Clearing memory of dead creeps...");
+  for(var i in Memory.creeps) {
+    if(!Game.creeps[i]) {
+        delete Memory.creeps[i];
+    }
+  }
 }
