@@ -53,8 +53,6 @@ function planRoadsOnStartup(room) {
     Array.prototype.push.apply(paths, sources.forEach(source => spawn.pos.findPathTo(source.pos)));
   });
   
-  extensions.forEach(planRoadAround);
-  
   let uniquePositions = [...new Set(paths.map(p => { return {x:p.x, y:p.y}}))];
   
   uniquePositions.forEach(p => room.createConstructionSite(p.x, p.y, STRUCTURE_ROAD));
