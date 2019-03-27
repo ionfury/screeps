@@ -1,5 +1,5 @@
 let all = [
-  'claimer',
+  //'claimer',
   'hauler',
   //'remoteHarvester',
   'builder',
