@@ -30,8 +30,6 @@ function planExtensions(room) {
     breakout++;
     let build = searchQueue.shift();
     let code = room.createConstructionSite(build.x, build.y, STRUCTURE_EXTENSION);
-    if(code == OK)
-      break;
       
     pushAdjacent(build, searchQueue);
   }
