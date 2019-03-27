@@ -60,7 +60,7 @@ function spawn(options) {
     return false;
   
   let creeps = Game.creeps;
-  let claimers = creeps.filter(c => c.memory.role === 'claimer');
+  let claimers = _.filter(creeps, c => c.memory.role === 'claimer');
   
   return claimers.length < 1;
 }

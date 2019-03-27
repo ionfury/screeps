@@ -1,4 +1,5 @@
 let all = [
+  'claimer',
   'hauler',
   //'remoteHarvester',
   'builder',
