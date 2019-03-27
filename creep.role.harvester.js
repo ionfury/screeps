@@ -14,9 +14,9 @@ let store = new Task('storeEnergy', {structureTypes: [STRUCTURE_CONTAINER]})
   
 let fill = new Task('storeEnergy', {structureTypes: [STRUCTURE_SPAWN,STRUCTURE_EXTENSION,STRUCTURE_TOWER]})
   .when((s) => s.carry.energy == s.carryCapacity 
-    && s.room.energyAvailable < s.room.energyCapacityAvailable)
+    && (s.room.energyAvailable < s.room.energyCapacityAvailable && s.room.find(FIND_MY_STRUCTURES, {filter: s => s.structureType == STRUCTURE_CONTAINER}).length > 0))
   .until((s) => s.carry.energy == 0 
-    || s.room.energyAvailable == s.room.energyCapacityAvailable);
+    || (s.room.energyAvailable == s.room.energyCapacityAvailable && s.room.find(FIND_MY_STRUCTURES, {filter: s => s.structureType == STRUCTURE_CONTAINER}).length == 0));
 
 let build = new Task('build')
   .when(s => s.carry.energy == s.carryCapacity 
@@ -31,7 +31,7 @@ let upgrade = new Task('upgrade')
 module.exports = {
   name: name,
   body: body,
-  tasks: [get, store, fill, build, upgrade],
+  tasks: [get, fill, build, upgrade],
   options: options,
   spawn: spawn
 };
