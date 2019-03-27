@@ -26,7 +26,12 @@ function run(creep) {
   }
   else {
     let task = role.tasks.find(t => t.ready(creep));
-    creep.memory.task = task.name;
-    creep.memory.options = task.options;
+    if(task) {
+      creep.memory.task = task.name;
+      creep.memory.options = task.options;
+    }
+    else {
+      creep.say("Idle");
+    }
   }
 }
