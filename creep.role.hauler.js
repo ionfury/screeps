@@ -11,7 +11,6 @@ let store = new Task('storeEnergy', {structureTypes: [STRUCTURE_SPAWN,STRUCTURE_
   .when((s) => s.carry.energy == s.carryCapacity)
   .until((s) => s.carry.energy == 0);
 
-
 module.exports = {
   name: name,
   body: body,
@@ -48,5 +47,5 @@ function spawn(options){
     .map(c => c.memory.role)
     .reduce((acc, role) => (acc[role] = (acc[role] || 0) + 1, acc), {});
   let count = creepsInRoom[name] || 0;
-  return count < 3;
+  return count < room.find(FIND_SOURCES).length * 2;
 }

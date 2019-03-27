@@ -16,19 +16,19 @@ function planExtensions(room) {
     room.memory.extensionsPlanned = 0;
   }
 
-  if(room.memory.extensionsPlanned >= possibleExtensions(room)){
+  let max = maxExtensions(room);
+
+  if(room.memory.extensionsPlanned >=max){
     return;
   }
 
-  let pos = new Pos().from(room.find(FIND_STRUCTURES, {
-    filter: o => o.structureType == STRUCTURE_CONTROLLER
-  })[0].pos);
+  let pos = new Pos().from(room.find(FIND_MY_SPAWNS)[0].pos);
 
   let searchQueue = [];
   pushAdjacent(pos, searchQueue);
   
   let breakout = 0;
-  while(extensions(room) < possibleExtensions(room) && breakout<100) {
+  while(extensions(room) < max && breakout<100) {
     breakout++;
     let build = searchQueue.shift();
     let code = room.createConstructionSite(build.x, build.y, STRUCTURE_EXTENSION);
@@ -42,10 +42,38 @@ function planExtensions(room) {
   }
 }
 
-function possibleExtensions(room) {
-  if(room.controller.level < 2)
-    return 0;
-  else return 5;
+function maxExtensions(room) {
+  let ret = 0;
+  switch(room.controller.level) {
+    case 0:
+      ret = 0;
+      break;
+    case 1:
+      ret = 0;
+      break;
+    case 2:
+      ret = 5;
+      break;
+    case 3:
+      ret = 10;
+      break;
+    case 4:
+      ret = 20;
+      break;
+    case 5:
+      ret = 30;
+      break;
+    case 6:
+      ret = 40;
+      break;
+    case 7:
+      ret = 50;
+      break;
+    case 8:
+      ret = 60;
+      break;
+  }
+  return ret;
 }
 
 function extensions(room){
