@@ -4,7 +4,7 @@ let constructionManager = require('manager.construction');
 
 let utils = require('constant.utilities');
 
-const debug = true;
+const debug = false;
 
 module.exports.loop = function () {
 
@@ -32,7 +32,7 @@ module.exports.loop = function () {
 	}
 	let d = new Date();
 	
-	console.log(Game.time, b-a, c-b, d-c)
+	if(debug) console.log(Game.time, b-a, c-b, d-c)
 }
 
 function planRoadsOnStartup(room) {
