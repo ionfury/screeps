@@ -45,9 +45,9 @@ function spawn(options){
   let creepsInRoom = creeps
     .map(c => c.memory.role)
     .reduce((acc, role) => (acc[role] = (acc[role] || 0) + 1, acc), {});
-  let creeps = creepsInRoom[name] || 0;
+  let count = creepsInRoom[name] || 0;
   let containers = room.find(FIND_STRUCTURES, {
     filter: o=>o.structureType==STRUCTURECONTAINER
   }).length;
-  return creeps < containers * 2;
+  return count < containers * 2;
 }
