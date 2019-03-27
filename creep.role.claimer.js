@@ -51,29 +51,17 @@ function options(options) {
     role: name,
     spawnId: options.spawnId,
     home: home.name,
-    target: unclaimedRooms()
+    target: Game.flags.Claim.room
   }};
 }
 
 function spawn(options) {
-  let flags = Game.flags;
-  let claims = flags.filter(f => f.name === 'Claim');
+  if(!Game.flags.Claim)
+    return false;
+  
   let creeps = Game.creeps;
   let claimers = creeps.filter(c => c.memory.role === 'claimer');
   
-  return claims.length < claimers.length;
-}
-
-function unclaimedRoom() {
-  let flags = Game.flags;
-  let claims = flags.filter(f => f.name === 'Claim');
-  let creeps = Game.creeps;
-  let claimers = creeps.filter(c => c.memory.role === 'claimer');
-
-  let unclaimed = _.difference(claims.map(c => c.room), claimers.map(c => c.memory.target));
-
-  if(unclaimed.length > 0)
-    return unclaimed[0];
-  else return []; 
+  return claimers.length < 1;
 }
 
