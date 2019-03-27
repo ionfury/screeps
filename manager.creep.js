@@ -20,8 +20,8 @@ function run(creep) {
       creep.memory.task = undefined;
     }
     else {
-      let execution = executionFactory.create(taskName);
       try {
+        let execution = executionFactory.create(taskName);
         execution.run(creep, options);
       }
       catch (ex) {
