@@ -6,18 +6,13 @@ const name = 'harvester';
 let get = new Task('getEnergy', {useContainer: false, useSource: true})
   .when((s) => s.carry.energy < s.carryCapacity)
   .until((s) => s.carry.energy == s.carryCapacity);
-
-let store = new Task('storeEnergy', {structureTypes: [STRUCTURE_CONTAINER]})
-  .when((s) => s.carry.energy == s.carryCapacity 
-    && s.room.find(FIND_MY_STRUCTURES, {filter: s => s.structureType == STRUCTURE_CONTAINER}).length > 0)
-  .until((s) => s.carry.energy == 0);
   
 let fill = new Task('storeEnergy', {structureTypes: [STRUCTURE_SPAWN,STRUCTURE_EXTENSION,STRUCTURE_TOWER]})
   .when((s) => s.carry.energy == s.carryCapacity 
     && (s.room.energyAvailable < s.room.energyCapacityAvailable && s.room.find(FIND_MY_STRUCTURES, {filter: s => s.structureType == STRUCTURE_CONTAINER}).length > 0))
   .until((s) => s.carry.energy == 0 
     || (s.room.energyAvailable == s.room.energyCapacityAvailable && s.room.find(FIND_MY_STRUCTURES, {filter: s => s.structureType == STRUCTURE_CONTAINER}).length == 0));
-
+/*
 let build = new Task('build')
   .when(s => s.carry.energy == s.carryCapacity 
     && s.room.find(FIND_CONSTRUCTION_SITES))
@@ -27,7 +22,7 @@ let build = new Task('build')
 let upgrade = new Task('upgrade')
   .when(s => s.carry.energy == s.carryCapacity && !s.room.find(FIND_CONSTRUCTION_SITES))
   .until(s => s.carry.energy == 0);
-
+*/
 module.exports = {
   name: name,
   body: body,
