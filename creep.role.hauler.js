@@ -49,5 +49,5 @@ function spawn(options){
   let containers = room.find(FIND_STRUCTURES, {
     filter: o=>o.structureType==STRUCTURE_CONTAINER
   }).length;
-  return count < containers * 2;
+  return count < containers;
 }
