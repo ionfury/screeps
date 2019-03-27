@@ -18,7 +18,7 @@ function spawn(self) {
     if(role.spawn({spawnId: self.id})) {
       let name = `${type}_${Math.random().toString(26).slice(2)}`;
       let code = self.spawnCreep(
-        role.body(self.energy),
+        role.body(self.room.energyAvailable),
         name,
         role.options({spawnId: self.id}));
         
