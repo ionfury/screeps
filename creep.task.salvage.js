@@ -7,7 +7,7 @@ function salvage(self, options) {
     filter: e => e.resourceType == RESOURCE_ENERGY
   });
 
-  if(self.pickup(droppedEnergy == ERR_NOT_IN_RANGE) {
+  if(self.pickup(droppedEnergy == ERR_NOT_IN_RANGE)) {
     self.moveTo(droppedEnergy);
   }
 }

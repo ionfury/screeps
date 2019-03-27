@@ -4,13 +4,13 @@ let utils = require('constant.utilities');
 const name = 'hauler';
 
 let salvage = new Task('salvage', {})
-  .when(c => c.carry.energy < c.carry.capacity 
+  .when(c => c.carry.energy < c.carryCapacity 
     && self.room.find(FIND_DROPPED_RESOURCES).length > 0)
-  .until(c => c.carry.energy == c.carrycapacity);
+  .until(c => c.carry.energy == c.carryCapacity);
 
 let get = new Task('getEnergy', {useContainer: true, useSource:false})
   .when(s => s.carry.energy < s.carryCapacity
-    && self.room.find(FIND_DROPPED_RESOURCES).length == 0)
+    && s.room.find(FIND_DROPPED_RESOURCES).length == 0)
   .until(s => s.carry.energy == s.carryCapacity);
 
 let store = new Task('storeEnergy', {structureTypes: [STRUCTURE_SPAWN,STRUCTURE_EXTENSION,STRUCTURE_TOWER]})
@@ -26,7 +26,7 @@ module.exports = {
 };
 
 function body(budget) {
-  let body = [MOVE, CARRY];
+  let body = [WORK, MOVE, CARRY];
   
   while(utils.cost(body)+ BODYPART_COST[CARRY] + BODYPART_COST[MOVE] <= budget){
     body.push(CARRY);
