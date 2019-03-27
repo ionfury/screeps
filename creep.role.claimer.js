@@ -13,7 +13,7 @@ let go = new Task('goToRoom', {destination: 'target'})
   .until(c => c.pos.findPathTo(Game.rooms[c.memory['target']].controller).length > 0)
 
 let claim = new Task('claim')
-  .when(c => c.carry.energy == c.carry.capacity 
+  .when(c => c.carry.energy == c.carryCapacity 
     && c.room.name == c.memory['target'])
   .until(c => c.carry.energy == 0
     || Game.rooms[c.memory['target']].my)
@@ -32,13 +32,8 @@ module.exports = {
 }
 
 function body(budget) {
-  let body = [WORK, MOVE, CARRY];
+  let body = [WORK, MOVE, CARRY, CLAIM];
   
-  while(utils.cost(body)+ BODYPART_COST[CARRY] + BODYPART_COST[MOVE] + BODYPART_COST[WORK] <= budget){
-    body.push(CARRY);
-    body.push(MOVE);
-    body.push(WORK);
-  }
 
   return body;
 }
