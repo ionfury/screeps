@@ -12,15 +12,13 @@ function plan(room) {
 }
 
 function planExtensions(room) {
-  if(room.memory.extensionsPlanned == undefined) {
-    room.memory.extensionsPlanned = 0;
-  }
-
   let max = maxExtensions(room);
+  let cur = room.find(FIND_MY_STRUCTURES, {
+    filter: o=>o.structureType==STRUCTURE_EXTENSION
+  });
 
-  if(room.memory.extensionsPlanned >=max){
-    return;
-  }
+  if(max == cur) return;
+
 
   let pos = new Pos().from(room.find(FIND_MY_SPAWNS)[0].pos);
 
