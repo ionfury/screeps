@@ -19,7 +19,6 @@ function planExtensions(room) {
 
   if(max == cur) return;
 
-
   let pos = new Pos().from(room.find(FIND_MY_SPAWNS)[0].pos);
 
   let searchQueue = [];
@@ -30,12 +29,25 @@ function planExtensions(room) {
     breakout++;
     let build = searchQueue.shift();
     let code = room.createConstructionSite(build.x, build.y, STRUCTURE_EXTENSION);
+
+    if(code==OK) {
+      buildRoadsAround(build,room);
+    }
       
     pushAdjacent(build, searchQueue);
   }
   if(breakout > 90) {
     console.log('oh shit')
   }
+}
+
+function buildRoadsAround(pos, room) {
+  let arr = ['n','s','e','w'];
+
+  arr.forEach(i => {
+    let p = new Pos().from(pos).step(i);
+    room.createConstructionSite(p.x, p.y, STRUCTURE_ROAD);
+  });
 }
 
 function maxExtensions(room) {

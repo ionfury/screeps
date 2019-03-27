@@ -27,6 +27,7 @@ module.exports.loop = function () {
 
 	for(let n in Game.rooms) {
 		let room = Game.rooms[n];
+    planRoadsOnStartup(room);
 		constructionManager.run(room);
 	}
 	let d = new Date();
@@ -34,7 +35,9 @@ module.exports.loop = function () {
 	console.log(Game.time, b-a, c-b, d-c)
 }
 
-function planRoads(room) {
+function planRoadsOnStartup(room) {
+  if(room.memory.roadsPlanned == true) return;
+
   let controller = room.controller;
   let spawns = room.find(FIND_MY_SPAWNS);
   let sources = room.find(FIND_SOURCES);
@@ -45,18 +48,16 @@ function planRoads(room) {
   let paths = [];
 
   spawns.forEach(spawn => {
-    planRoad(spawn.pos, controller.pos);
+    Array.prototype.push.apply(paths, (spawn.pos.findPathTo(controller.pos)));
 
-    sources.forEach(source => planRoad(spawn,pos, source.pos));
+    Array.prototype.push.apply(paths, sources.forEach(source => spawn.pos.findPathTo(source.pos)));
   });
-
+  
   extensions.forEach(planRoadAround);
-}
+  
+  let uniquePositions = [...new Set(paths.map(p => { return {x:p.x, y:p.y}}))];
+  
+  uniquePositions.forEach(p => room.createConstructionSite(p.x, p.y, STRUCTURE_ROAD));
 
-function planRoad(from, to) {
-  console.log(from, to);
-}
-
-function planRoadAround(pos) {
-  console.log('around', pos);
+  room.memory.roadsPlanned = true;
 }
