@@ -3,22 +3,22 @@ let utils = require ('constant.utilities');
 
 const name = 'claimer';
 
-let getEnergy = new Task('getEnergy', 'getEnergy', {useContainer: true, useSource: true})
+let getEnergy = new Task(1, 'getEnergy', {useContainer: true, useSource: true})
   .when(c => c.carry.energy < c.carryCapacity && c.room.name == c.memory['home'])
   .until(c => c.carry.energy == c.carryCapacity);
 
-let go = new Task('goToRoom', 'goToRoom', {destination: 'target'})
+let go = new Task(2, 'goToRoom', {destination: 'target'})
   .when(c => c.carry.energy == c.carryCapacity && c.room.name != [c.memory['target']])
   .until(c => c.room.name == c.memory['target']);
   //.until(c => c.pos.findPathTo(Game.rooms[c.memory['target']].controller).length > 0)
 
-let claim = new Task('claim', 'claim')
+let claim = new Task(3, 'claim')
   .when(c => c.carry.energy == c.carryCapacity 
     && c.room.name == c.memory['target'])
   .until(c => c.carry.energy == 0
     || Game.rooms[c.memory['target']].my)
 
-let home = new Task('goHome', 'goHome')
+let home = new Task(4, 'goHome')
   .when(c => c.carry.energy == 0
     && c.room.name == c.memory['target'])
   .until(c => c.room.name == Game.getObjectById(self.memory.spawnId).room.name)
