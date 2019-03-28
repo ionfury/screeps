@@ -9,8 +9,9 @@ function creepEnergyAtCapacity(creep) {
 
 
 let get = new Task('getEnergy', {useContainer: false, useSource: true})
-  .when((s) => s.carry.energy < s.carryCapacity)
-  .until(c => c.carry.energy == c.carryCapacity);
+  .while(c => c.carry.energy < c.carryCapacity);
+ // .when((s) => s.carry.energy < s.carryCapacity)
+  //.until(c => c.carry.energy == c.carryCapacity);
   
 let fill = new Task('storeEnergy', {structureTypes: [STRUCTURE_CONTAINER]})
   .when((s) => s.carry.energy == s.carryCapacity)// && s.room.find(FIND_MY_STRUCTURES, {filter: s => s.structureType == STRUCTURE_CONTAINER}).length > 0))
