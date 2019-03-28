@@ -2,49 +2,84 @@ let roleFactory = require('creep.roleFactory');
 let executionFactory = require('creep.task.executionFactory')
 let logger = require('constant.logger');
 
-const say = false;
-
-const debugName = '';
-
 module.exports = {
   run: run
 }
 
 function run(creep) {
   let taskName = creep.memory.task;
+  let roleName = creep.memory.role;
+  let options = creep.memory.options;
+
+  if(!roleName) {
+    creep.say(`no role`);
+    console.log(`${creep.name} missing role!`);
+    return;
+  }
+
+  try
+  {
+    let role = roleFactory.create(creep.memory.role);
+
+    //check task
+    let task = role.tasks.find(t => t.name === taskName);
+
+    if(task.end(creep)) {
+      creep.memory.task = undefined;
+      taskName = undefined;
+      task = undefined;
+      options = undefined;
+    }
+
+    //start task
+    if(!taskName) {
+      task = role.tasks.find(t => t.ready(creep));
+      taskName = task.name;
+      options = task.options;
+      if(task) {
+        creep.memory.task = task.name;
+        creep.memory.options = task.options;
+      }
+    }
+
+    //run task
+    if(taskName) {
+      let execution = executionFactory.create(taskName);
+      execution.run(creep, options);
+    }
+    else {
+      creep.say("Idle");
+    }
+  }
+  catch (ex) {
+    console.log(`"${creep.name}" error while running "${taskName}":`, ex);
+  }
+}
+
+
+/* break glass in case of emergency
+function run2(creep) {
+  let taskName = creep.memory.task;
   let options = creep.memory.options;
   if(say) creep.say(`${taskName}`);
 
 
   try {
-    if(debugName == creep.name)
-      console.log(`Debugging ${creep.name}`)
 
     let role = roleFactory.create(creep.memory.role);
     
     if(taskName) {
-      if(debugName == creep.name)
-        console.log(`  task:${taskName}`)
       if(role.tasks.find(t => t.name === taskName).end(creep)) {
-        
-        if(debugName == creep.name)
-          console.log(`  ending task:${taskName}`)
         creep.memory.task = undefined;
       }
       else {
-        if(debugName == creep.name)
-          console.log(`  executing...`)
         let execution = executionFactory.create(taskName);
         execution.run(creep, options);
       }
     }
     else {
-      if(debugName == creep.name)
-        console.log(`  finding new task`)
       let task = role.tasks.find(t => t.ready(creep));
       if(task) {
-        if(debugName == creep.name)
-          console.log(`  task found: ${task.name}`)
         creep.memory.task = task.name;
         creep.memory.options = task.options;
       }
@@ -57,3 +92,4 @@ function run(creep) {
     console.log(`"${creep.name}" error while running "${taskName}":`, ex);
   }
 }
+*/

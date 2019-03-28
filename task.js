@@ -15,6 +15,12 @@ class Task {
     this._until = fn;
     return this;
   }
+
+  while(fn) {
+    this._when = fn;
+    this._until = !fn;
+    return this;
+  }
   
   end(creep) {
     return this._until(creep);
