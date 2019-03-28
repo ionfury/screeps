@@ -35,9 +35,9 @@ function run(creep) {
     //start task
     if(!taskId) {
       task = role.tasks.find(t => t.ready(creep));
-      taskId = task.id;
-      options = task.options;
       if(task) {
+        taskId = task.id;
+        options = task.options;
         creep.memory.task = task.id;
         creep.memory.options = task.options;
       }

@@ -3,6 +3,9 @@ let utils = require('constant.utilities');
 
 const name = 'upgrader';
 
+let getobsolete = new Task('getEnergy', 'getEnergy', {useContainer: true, useSource:true})
+  .while(c => c.carry.energy < c.carryCapacity);
+
 let get = new Task('getEnergy', 'getEnergy', {useContainer: true, useSource:true})
   .while(c => c.carry.energy < c.carryCapacity);
 
