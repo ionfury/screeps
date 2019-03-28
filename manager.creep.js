@@ -20,11 +20,10 @@ function run(creep) {
   try
   {
     let role = roleFactory.create(creep.memory.role);
+    let task = role.tasks.find(t => t.id === taskId);
 
     //check task
     if(taskId) {
-      let task = role.tasks.find(t => t.id === taskId);
-
       if(task.end(creep)) {
         creep.memory.task = undefined;
         taskId = undefined;
@@ -46,7 +45,6 @@ function run(creep) {
 
     //run task
     if(taskId) {
-      console.log(creep.roleName, taskId, task.name);
       let execution = executionFactory.create(taskId);
       execution.run(creep, options);
     }
