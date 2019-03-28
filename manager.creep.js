@@ -22,13 +22,15 @@ function run(creep) {
     let role = roleFactory.create(creep.memory.role);
 
     //check task
-    let task = role.tasks.find(t => t.name === taskName);
+    if(taskName) {
+      let task = role.tasks.find(t => t.name === taskName);
 
-    if(task.end(creep)) {
-      creep.memory.task = undefined;
-      taskName = undefined;
-      task = undefined;
-      options = undefined;
+      if(task.end(creep)) {
+        creep.memory.task = undefined;
+        taskName = undefined;
+        task = undefined;
+        options = undefined;
+      }
     }
 
     //start task
