@@ -46,7 +46,7 @@ function run(creep) {
 
     //run task
     if(taskId) {
-      let execution = executionFactory.create(task.name);
+      let execution = executionFactory.create(taskId);
       execution.run(creep, options);
     }
     else {
