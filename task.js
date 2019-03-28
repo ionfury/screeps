@@ -18,7 +18,7 @@ class Task {
 
   while(fn) {
     this._when = fn;
-    this._until = !fn;
+    this._until = (args => !fn(args))
     return this;
   }
   
