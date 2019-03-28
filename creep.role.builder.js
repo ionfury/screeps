@@ -3,18 +3,18 @@ let utils = require ('constant.utilities');
 
 const name = 'builder';
 
-let get = new Task('getEnergy', {useContainer: true, useSource: true})
+let get = new Task('getEnergy','getEnergy', {useContainer: true, useSource: true})
   .while(c => c.carry.energy < c.carryCapacity);
   
-let build = new Task('build')
+let build = new Task('build', 'build')
   .when(s => s.carry.energy == s.carryCapacity && s.room.find(FIND_CONSTRUCTION_SITES))
   .until(s => s.carry.energy == 0 || !s.room.find(FIND_CONSTRUCTION_SITES))
 
-let repair = new Task('repair')
+let repair = new Task('repair', 'repair')
   .when(s => s.carry.energy == s.carryCapacity && s.room.find(FIND_STRUCTURES, { filter: o => o.structureType === STRUCTURE_ROAD && (o.hits > o.hitsMax / 3)}))
   .until(s => s.carry.energy == 0 || !s.room.find(FIND_STRUCTURES, { filter: o => o.structureType === STRUCTURE_ROAD && (o.hits > o.hitsMax / 3)}));
 
-let upgrade = new Task('upgrade')
+let upgrade = new Task('upgrade', 'upgrade')
   .when(s => s.carry.energy == s.carryCapacity && !s.room.find(FIND_CONSTRUCTION_SITES))
   .until(s => s.carry.energy == 0);
 
