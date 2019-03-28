@@ -1,5 +1,6 @@
 class Task {
-  constructor(name, options) {
+  constructor(id, name, options) {
+    this.id = id;
     this.name = name;
     this.options = options;
     this._when = () => true;
@@ -30,4 +31,5 @@ class Task {
     return this._when(creep);
   }
 }
+
 module.exports = Task;

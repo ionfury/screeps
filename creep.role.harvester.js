@@ -8,10 +8,10 @@ function creepEnergyAtCapacity(creep) {
 }
 
 
-let get = new Task('getEnergy', {useContainer: false, useSource: true})
+let get = new Task('getEnergy', 'getEnergy', {useContainer: false, useSource: true})
   .while(c => c.carry.energy < c.carryCapacity);
   
-let fill = new Task('storeEnergy', {structureTypes: [STRUCTURE_CONTAINER, STRUCTURE_SPAWN]})
+let fill = new Task('storeEnergy', 'storeEnergy', {structureTypes: [STRUCTURE_CONTAINER, STRUCTURE_SPAWN]})
   .while(c => c.carry.energy > 0);
 
 module.exports = {

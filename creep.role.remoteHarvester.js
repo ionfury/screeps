@@ -3,19 +3,19 @@ let utils = require('constant.utilities');
 
 const name = 'remoteHarvester';
 
-let go = new Task('goToRoom', {destination: 'target'})
+let go = new Task('goToRoom', 'goToRoom', {destination: 'target'})
   .when(s=> s.carry.energy < s.carry.capacity)
   .until(s=> s.room.id != s.memory['target']);
 
-let harvest = new Task('getEnergy', {useContainer: false, useSource: true})
+let harvest = new Task('getEnergy', 'getEnergy', {useContainer: false, useSource: true})
   .when(s=> s.carry.energy < s.carryCapacity && s.room.id == s.memory['target'])
   .until(s=> s.carry.energy == s.carryCapacity);
 
-let ret = new Task('goToRoom', {destination: 'home'})
+let ret = new Task('goToRoom', 'goToRoom', {destination: 'home'})
   .when(s=> s.carry.energy == s.carry.capacity)
   .until(s=> s.room.id == s.memory['home']);
 
-let store = new Task('storeEnergy', {structureTypes: [STRUCTURE_SPAWN,STRUCTURE_EXTENSION,STRUCTURE_TOWER]})
+let store = new Task('storeEnergy', 'storeEnergy', {structureTypes: [STRUCTURE_SPAWN,STRUCTURE_EXTENSION,STRUCTURE_TOWER]})
   .when(s=> s.carry.energy == s.carryCapacity && s.room.id == s.memory['home'])
   .until(s=> s.carry.energy ==0);
 

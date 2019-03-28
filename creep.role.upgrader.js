@@ -3,12 +3,12 @@ let utils = require('constant.utilities');
 
 const name = 'upgrader';
 
-let get = new Task('getEnergy', {useContainer: true, useSource:true})
+let get = new Task('getEnergy', 'getEnergy', {useContainer: true, useSource:true})
   .while(c => c.carry.energy < c.carryCapacity);
 
-let upgrade = new Task('upgrade')
+let upgrade = new Task('upgrade', 'upgrade')
   .while(c => c.carry.energy > 0);
-  
+
 module.exports = {
   name: name,
   body: body,
