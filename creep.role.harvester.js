@@ -12,7 +12,7 @@ let get = new Task('getEnergy', {useContainer: false, useSource: true})
   .while(c => c.carry.energy < c.carryCapacity);
   
 let fill = new Task('storeEnergy', {structureTypes: [STRUCTURE_CONTAINER, STRUCTURE_SPAWN]})
-  .while(c .carry.energy > 0);
+  .while(c => c.carry.energy > 0);
 
 
 /*
