@@ -10,6 +10,7 @@ function run(creep) {
   let taskId = creep.memory.task;
   let roleName = creep.memory.role;
   let options = creep.memory.options;
+  let task = undefined;
 
   if(!roleName) {
     creep.say(`no role`);
@@ -46,6 +47,7 @@ function run(creep) {
 
     //run task
     if(taskId) {
+      console.log(creep.roleName, taskId, task.name);
       let execution = executionFactory.create(taskId);
       execution.run(creep, options);
     }
