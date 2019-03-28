@@ -55,5 +55,5 @@ function spawn(options){
   let creeps = Game.creeps;
   let rbs = _.filter(creeps, c => c.memory.role === name);
   
-  return rbs < 2;
+  return rbs < 3;
 }
