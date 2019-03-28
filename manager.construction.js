@@ -8,8 +8,8 @@ module.exports = {
 
 function plan(room) {
   if(room.find(FIND_MY_SPAWNS).length == 0) return;
-  planContainersForSources(room);
-  planExtensions(room);
+ // planContainersForSources(room);
+ // planExtensions(room);
 }
 
 function planExtensions(room) {
