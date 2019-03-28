@@ -3,15 +3,10 @@ let utils = require('constant.utilities');
 
 const name = 'harvester';
 
-function creepEnergyAtCapacity(creep) {
-  return creep.carry.energy == creep.carrycapacity;
-}
-
-
-let get = new Task('getEnergy', 'getEnergy', {useContainer: false, useSource: true})
+let get = new Task(1, 'getEnergy', {useContainer: false, useSource: true})
   .while(c => c.carry.energy < c.carryCapacity);
   
-let fill = new Task('storeEnergy', 'storeEnergy', {structureTypes: [STRUCTURE_CONTAINER, STRUCTURE_SPAWN]})
+let fill = new Task(2, 'storeEnergy', {structureTypes: [STRUCTURE_CONTAINER, STRUCTURE_SPAWN]})
   .while(c => c.carry.energy > 0);
 
 module.exports = {
