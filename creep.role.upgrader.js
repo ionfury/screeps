@@ -3,14 +3,6 @@ let utils = require('constant.utilities');
 
 const name = 'upgrader';
 
-let getobsolete = new Task('getEnergy', 'getEnergy', {useContainer: true, useSource:true})
-  .when(c => false)
-  .until(c => true);
-
-let upgradeobsolete = new Task('upgrade', 'upgrade')
-.when(c => false)
-.until(c => true);
-
 let get = new Task(1, 'getEnergy', {useContainer: true, useSource:true})
   .while(c => c.carry.energy < c.carryCapacity);
 
