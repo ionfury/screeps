@@ -2,9 +2,10 @@ let spawnManager = require('manager.spawn');
 let creepManager = require('manager.creep');
 let constructionManager = require('manager.construction');
 
+let roomManager = require('manager.room');
+
 let utils = require('constant.utilities');
 
-const debug = false;
 
 module.exports.loop = function () {
 
@@ -12,27 +13,50 @@ module.exports.loop = function () {
     utils.cleanMemory();
   }
 
-	let a = new Date();
 	for(let name in Game.spawns){
 		let spawn = Game.spawns[name];
 		spawnManager.run(spawn);
 	}
-	let b = new Date();
 
 	for(let n in Game.creeps) {
 		let creep = Game.creeps[n];	
 		creepManager.run(creep);
 	}
-	let c = new Date();
 
 	for(let n in Game.rooms) {
 		let room = Game.rooms[n];
     planRoadsOnStartup(room);
 		constructionManager.run(room);
-	}
-	let d = new Date();
-	
-	if(debug) console.log(Game.time, b-a, c-b, d-c)
+  }
+  
+  for(let n in Game.structures) {
+    let structure = Game.structures[n];
+    if(structure.structureType === STRUCTURE_TOWER) {
+      runTower(structure)
+    }
+  }
+}
+
+function runTower(tower) {
+  var hostile = tower.pos.findClosestByRange(FIND_HOSTILE_CREEPS);
+  
+  if(hostile) {
+    tower.attack(hostile);
+    return;
+  }
+
+  if(tower.energy > tower.energyCapacity / 2) {
+    let damaged = tower.pos.findClosestByRange(FIND_STRUCTURES, {
+      filter: s => s.hits < s.hitsMax
+        && s.structureType != STRUCTURE_WALL 
+        && s.structureType != STRUCTURE_RAMPART
+    });
+    
+    if(damaged){
+      tower.repair(damaged);
+    }
+  }
+
 }
 
 function planRoadsOnStartup(room) {
