@@ -7,10 +7,10 @@ let go = new Task(1, 'goToRoom', {destination: 'target'})
   .when(s=> s.room.name == s.memory['home'])
   .until(s=> s.room.name == s.memory['target']);
 
-let get = new Task(1,'getEnergy', {useContainer: true, useSource: true})
+let get = new Task(2,'getEnergy', {useContainer: true, useSource: true})
   .while(c => c.carry.energy < c.carryCapacity);
   
-let build = new Task(2, 'build')
+let build = new Task(3, 'build')
   .when(s => s.carry.energy == s.carryCapacity && s.room.find(FIND_CONSTRUCTION_SITES).length > 0)
   .until(s => s.carry.energy == 0 || s.room.find(FIND_CONSTRUCTION_SITES).length == 0)
 
