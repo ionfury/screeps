@@ -12,7 +12,7 @@ let upgrade = new Task(2, 'upgrade')
 module.exports = {
   name: name,
   body: body,
-  tasks: [get, upgrade, getobsolete, upgradeobsolete],
+  tasks: [get, upgrade],
   options: options,
   spawn: spawn
 };
