@@ -14,19 +14,6 @@ let get = new Task('getEnergy', {useContainer: false, useSource: true})
 let fill = new Task('storeEnergy', {structureTypes: [STRUCTURE_CONTAINER, STRUCTURE_SPAWN]})
   .while(c => c.carry.energy > 0);
 
-
-/*
-let build = new Task('build')/*
-let build = new Task('build')
-  .when(s => s.carry.energy == s.carryCapacity 
-    && s.room.find(FIND_CONSTRUCTION_SITES))
-  .until(s => s.carry.energy == 0 
-    || !s.room.find(FIND_CONSTRUCTION_SITES))
-
-let upgrade = new Task('upgrade')
-  .when(s => s.carry.energy == s.carryCapacity && !s.room.find(FIND_CONSTRUCTION_SITES))
-  .until(s => s.carry.energy == 0);
-*/
 module.exports = {
   name: name,
   body: body,
