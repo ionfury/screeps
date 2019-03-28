@@ -13,7 +13,7 @@ let get = new Task(2, 'getEnergy', {useContainer: true, useSource:false})
   .until(s => s.carry.energy == s.carryCapacity);
 
 let store = new Task(3, 'storeEnergy', {structureTypes: [STRUCTURE_SPAWN,STRUCTURE_EXTENSION,STRUCTURE_TOWER]})
-  .while(c => c.carry.energy > 0);
+  .while(c => c.carry.energy > 0 && c.room.energyAvailable < c.room.energyCapacityAvailable);
 
 let upgrade = new Task(2, 'upgrade')
   .while(c => c.carry.energy > 0 && c.room.energyAvailable == c.room.energyCapacityAvailable);
