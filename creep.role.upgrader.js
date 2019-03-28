@@ -4,18 +4,23 @@ let utils = require('constant.utilities');
 const name = 'upgrader';
 
 let getobsolete = new Task('getEnergy', 'getEnergy', {useContainer: true, useSource:true})
+  .when(c => false)
+  .until(c => true);
+
+let upgradeobsolete = new Task('upgrade', 'upgrade')
+.when(c => false)
+.until(c => true);
+
+let get = new Task(1, 'getEnergy', {useContainer: true, useSource:true})
   .while(c => c.carry.energy < c.carryCapacity);
 
-let get = new Task('getEnergy', 'getEnergy', {useContainer: true, useSource:true})
-  .while(c => c.carry.energy < c.carryCapacity);
-
-let upgrade = new Task('upgrade', 'upgrade')
+let upgrade = new Task(2, 'upgrade')
   .while(c => c.carry.energy > 0);
 
 module.exports = {
   name: name,
   body: body,
-  tasks: [get, upgrade],
+  tasks: [get, upgrade, getobsolete, upgradeobsolete],
   options: options,
   spawn: spawn
 };
