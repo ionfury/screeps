@@ -56,5 +56,7 @@ function run(creep) {
   catch (ex) {
     creep.say("Ex!");
     console.log(`"${creep.name}" error while running taskId:"${taskId}":`, ex);
+    creep.memory.task = undefined;
+    creep.memory.options = undefined;
   }
 }
