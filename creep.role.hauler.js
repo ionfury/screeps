@@ -4,7 +4,7 @@ let utils = require('constant.utilities');
 const name = 'hauler';
 
 let salvage = new Task(1, 'salvage', {})
-  .while(c => c.carry.energy < c.carrycapacity 
+  .while(c => c.carry.energy < c.carryCapacity 
     && c.room.find(FIND_DROPPED_RESOURCES).length > 0);
 
 let get = new Task(2, 'getEnergy', {useContainer: true, useSource:false})
