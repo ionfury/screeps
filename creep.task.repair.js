@@ -4,11 +4,13 @@ module.exports = {
 
 function repair(self, options) {
   let repair = self.pos.findClosestByRange(FIND_STRUCTURES, {
-    filter: o => o.structureType === STRUCTURE_ROAD && (o.hits > o.hitsMax / 3)
+    filter: o => (o.hits < o.hitsMax / 3)
   });
 
   if(repair) {
-    self.moveTo(repair);
-    self.repair(repair);
+    let code = self.repair(repair)
+    if(code == ERR_NOT_IN_RANGE) {
+      self.moveTo(repair);
+    }
   }
 }
