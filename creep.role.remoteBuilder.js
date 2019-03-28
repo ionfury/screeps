@@ -4,7 +4,7 @@ let utils = require ('constant.utilities');
 const name = 'remoteBuilder';
 
 let go = new Task(1, 'goToRoom', {destination: 'target'})
-  .when(s.room.name == s.memory['home'])
+  .when(s=> s.room.name == s.memory['home'])
   .until(s=> s.room.name == s.memory['target']);
 
 let get = new Task(1,'getEnergy', {useContainer: true, useSource: true})
