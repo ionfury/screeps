@@ -3,20 +3,20 @@ let utils = require('constant.utilities');
 
 const name = 'remoteHarvester';
 
-let go = new Task('goToRoom', 'goToRoom', {destination: 'target'})
-  .when(s=> s.carry.energy < s.carry.capacity)
-  .until(s=> s.room.id != s.memory['target']);
+let go = new Task(1, 'goToRoom', {destination: 'target'})
+  .when(s=> s.carry.energy < s.carryCapacity && s.room.name == s.memory['home'])
+  .until(s=> s.room.name == s.memory['target']);
 
-let harvest = new Task('getEnergy', 'getEnergy', {useContainer: false, useSource: true})
-  .when(s=> s.carry.energy < s.carryCapacity && s.room.id == s.memory['target'])
+let harvest = new Task(2, 'getEnergy', {useContainer: false, useSource: true})
+  .when(s=> s.carry.energy < s.carryCapacity && s.room.name == s.memory['target'])
   .until(s=> s.carry.energy == s.carryCapacity);
 
-let ret = new Task('goToRoom', 'goToRoom', {destination: 'home'})
-  .when(s=> s.carry.energy == s.carry.capacity)
-  .until(s=> s.room.id == s.memory['home']);
+let ret = new Task(3, 'goToRoom', {destination: 'home'})
+  .when(s=> s.carry.energy == s.carryCapacity && s.room.name != s.memory['home'])
+  .until(s=> s.room.name == s.memory['home']);
 
-let store = new Task('storeEnergy', 'storeEnergy', {structureTypes: [STRUCTURE_SPAWN,STRUCTURE_EXTENSION,STRUCTURE_TOWER]})
-  .when(s=> s.carry.energy == s.carryCapacity && s.room.id == s.memory['home'])
+let store = new Task(4, 'storeEnergy', {structureTypes: [STRUCTURE_SPAWN,STRUCTURE_EXTENSION,STRUCTURE_TOWER,STRUCTURE_CONTAINER]})
+  .when(s=> s.carry.energy == s.carryCapacity && s.room.name == s.memory['home'])
   .until(s=> s.carry.energy ==0);
 
 module.exports = {
@@ -40,19 +40,19 @@ function body(budget) {
   return body;
 }
 
-function adjRooms(room) {
+function roomExits(room) {
   
   let exits = Game.map.describeExits(room.name);
 
   let dests = [];
   if(exits["1"] != undefined)
-    dests.push(exit["1"]);
+    dests.push(exits["1"]);
   if(exits["3"] != undefined)
-    dests.push(exit["3"]);
+    dests.push(exits["3"]);
   if(exits["5"] != undefined)
-    dests.push(exit["5"]);
+    dests.push(exits["5"]);
   if(exits["7"] != undefined)
-    dests.push(exit["7"]);
+    dests.push(exits["7"]);
 
     return dests;
 }
@@ -60,21 +60,21 @@ function adjRooms(room) {
 function options(options) {
   let spawn = Game.getObjectById(options.spawnId);
   let home = spawn.room;
-  let dests = adjRooms(spawn.room.name);
+  let dests = roomExits(spawn.room);
 
   return { memory: 
   {
     role: name,
     spawnId: options.spawnId,
-    home: home.id,
+    home: home.name,
     target: dests[Game.time%dests.length] //get random remote room
   }};
 }
 
 function spawn(options) {
   let spawn = Game.getObjectById(options.spawnId);
-  let creeps = Memory.creeps.filter(c => c.role === name).length;
-  let adjRooms = adjRooms(spawn.room);
+  let creeps = _.filter(Memory.creeps, c => c.role === name).length;
+  let adjRooms = roomExits(spawn.room);
 
   return creeps < adjRooms.length;
 }
