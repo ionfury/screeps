@@ -10,7 +10,7 @@ module.exports = {
 
 function spawn(self) {
   if(self.spawning) return;
-  if(self.energy < self.energyCapacity) return;
+  if(self.room.energyAvailable < 300) return;
   if(self.memory.queue == undefined) self.memory.queue = [];
 
   roles.types.forEach(type => {
