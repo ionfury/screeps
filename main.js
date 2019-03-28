@@ -2,8 +2,6 @@ let spawnManager = require('manager.spawn');
 let creepManager = require('manager.creep');
 let constructionManager = require('manager.construction');
 
-let roomManager = require('manager.room');
-
 let utils = require('constant.utilities');
 
 
