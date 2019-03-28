@@ -4,7 +4,7 @@ module.exports = {
 
 function repair(self, options) {
   let repair = self.pos.findClosestByRange(FIND_STRUCTURES, {
-    filter: o => (o.hits < o.hitsMax / 3)
+    filter: o => options.types.includes(o.structureType) && (o.hits < o.hitsMax / 3)
   });
 
   if(repair) {

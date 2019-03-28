@@ -10,7 +10,7 @@ let build = new Task(2, 'build')
   .when(s => s.carry.energy == s.carryCapacity && s.room.find(FIND_CONSTRUCTION_SITES).length > 0)
   .until(s => s.carry.energy == 0 || s.room.find(FIND_CONSTRUCTION_SITES).length == 0)
 
-let repair = new Task(3, 'repair')
+let repair = new Task(3, 'repair', {types: [STRUCTURE_ROAD]})
   .when(s => s.carry.energy == s.carryCapacity && s.room.find(FIND_STRUCTURES, { filter: o => o.structureType === STRUCTURE_ROAD && (o.hits > o.hitsMax / 3)}))
   .until(s => s.carry.energy == 0 || !s.room.find(FIND_STRUCTURES, { filter: o => o.structureType === STRUCTURE_ROAD && (o.hits > o.hitsMax / 3)}));
 

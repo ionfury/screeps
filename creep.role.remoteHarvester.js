@@ -42,7 +42,7 @@ function body(budget) {
 
 function adjRooms(room) {
   
-  let exits = Game.map.describeExits(spawn.room.name);
+  let exits = Game.map.describeExits(room.name);
 
   let dests = [];
   if(exits["1"] != undefined)
