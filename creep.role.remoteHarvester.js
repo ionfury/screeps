@@ -76,5 +76,5 @@ function spawn(options) {
   let creeps = _.filter(Memory.creeps, c => c.role === name).length;
   let adjRooms = roomExits(spawn.room);
 
-  return creeps < adjRooms.length;
+  return creeps < adjRooms.length * 3;
 }
