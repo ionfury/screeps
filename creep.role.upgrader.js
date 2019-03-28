@@ -4,13 +4,11 @@ let utils = require('constant.utilities');
 const name = 'upgrader';
 
 let get = new Task('getEnergy', {useContainer: true, useSource:true})
-  .when(s => s.carry.energy < s.carryCapacity)
-  .until(s => s.carry.energy == s.carryCapacity);
+  .while(c => c.carry.energy < c.carryCapacity);
 
 let upgrade = new Task('upgrade')
-  .when(s => s.carry.energy == s.carryCapacity)
-  .until(s => s.carry.energy == 0);
-
+  .while(c => c.carry.energy > 0);
+  
 module.exports = {
   name: name,
   body: body,
