@@ -11,8 +11,8 @@ let build = new Task(2, 'build')
   .until(s => s.carry.energy == 0 || s.room.find(FIND_CONSTRUCTION_SITES).length == 0)
 
 let repair = new Task(3, 'repair', {types: [STRUCTURE_ROAD]})
-  .when(s => s.carry.energy == s.carryCapacity && s.room.find(FIND_STRUCTURES, { filter: o => o.structureType === STRUCTURE_ROAD && (o.hits > o.hitsMax / 3)}))
-  .until(s => s.carry.energy == 0 || !s.room.find(FIND_STRUCTURES, { filter: o => o.structureType === STRUCTURE_ROAD && (o.hits > o.hitsMax / 3)}));
+  .when(s => s.carry.energy == s.carryCapacity && s.room.find(FIND_STRUCTURES, { filter: o => o.structureType === STRUCTURE_ROAD && (o.hits < o.hitsMax / 3)}))
+  .until(s => s.carry.energy == 0 || !s.room.find(FIND_STRUCTURES, { filter: o => o.structureType === STRUCTURE_ROAD && (o.hits < o.hitsMax / 3)}));
 
 let upgrade = new Task(4, 'upgrade')
   .when(s => s.carry.energy == s.carryCapacity && !s.room.find(FIND_CONSTRUCTION_SITES))
