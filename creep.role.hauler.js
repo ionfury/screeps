@@ -15,10 +15,13 @@ let get = new Task(2, 'getEnergy', {useContainer: true, useSource:false})
 let store = new Task(3, 'storeEnergy', {structureTypes: [STRUCTURE_SPAWN,STRUCTURE_EXTENSION,STRUCTURE_TOWER]})
   .while(c => c.carry.energy > 0);
 
+let upgrade = new Task(2, 'upgrade')
+  .while(c => c.carry.energy > 0 && c.room.energyAvailable == c.room.energyCapacityAvailable);
+
 module.exports = {
   name: name,
   body: body,
-  tasks: [salvage, get, store],
+  tasks: [salvage, get, store, upgrade],
   options: options,
   spawn: spawn
 };
