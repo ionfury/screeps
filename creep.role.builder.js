@@ -12,11 +12,12 @@ let build = new Task(2, 'build')
 
 let repair = new Task(3, 'repair', {types: [STRUCTURE_ROAD]})
   .while(s => s.carry.energy > 0 
-    && s.room.find(FIND_STRUCTURES, { filter: o => o.structureType === STRUCTURE_ROAD && (o.hits < o.hitsMax / 3)}).length > 0);
-  //.until(s => s.carry.energy == 0 || !s.room.find(FIND_STRUCTURES, { filter: o => o.structureType === STRUCTURE_ROAD && (o.hits < o.hitsMax / 3)}));
+    && s.room.find(FIND_STRUCTURES, { 
+      filter: o => o.structureType === STRUCTURE_ROAD && (o.hits < o.hitsMax / 3)
+    }).length > 0);
 
 let upgrade = new Task(4, 'upgrade')
-  .when(s => s.carry.energy == s.carryCapacity && !s.room.find(FIND_CONSTRUCTION_SITES))
+  .when(s => s.carry.energy == s.carryCapacity && s.room.find(FIND_CONSTRUCTION_SITES).length == 0)
   .until(s => s.carry.energy == 0);
 
 module.exports = {
