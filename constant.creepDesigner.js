@@ -2,17 +2,37 @@ module.exports = {
   design: design
 }
 
-function design(minimumBody, idealBody, energyBudget) {
+function design(minimumBodyDefinition, idealBodyDefinition, energyBudget, options) {
+  let possibleParts = BODYPARTS_ALL;
+  let minimumBody = [];
+  let queue = [];
+    
+  possibleParts.forEach(part => {
+      
+    for(let i = 0; i < minimumBodyDefinition[part]; i++) {
+      minimumBody.push(part);
+    }
+    
+    for(let i = 0; i < idealBodyDefinition[part] - minimumBodyDefinition[part]; i++) {
+      queue.push(part);
+    }
+  });
+  
+  if(energyBudget < bodyCost(minimumBody))
+    return false;
+    
   let body = minimumBody;
-  let queue = _.difference(minimumBody, idealBody);
+  console.log(queue)
   
   while(queue.length > 0) {
-    let part = queue.pop();
+    let part = queue.shift();
 
-    if(bodyCost(body) + BODYPART_COST[part] > energyBudget)
+    if(bodyCost(body) + BODYPART_COST[part] > energyBudget) {
       break;
-    else
+    }
+    else {
       body.push(part);
+    }
   }
 
   return body;

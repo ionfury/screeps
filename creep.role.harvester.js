@@ -1,5 +1,5 @@
 let Task = require('task');
-let Designer = require('constants.creepDesigner');
+let Designer = require('constant.creepDesigner');
 let utils = require('constant.utilities');
 
 const name = 'harvester';
@@ -19,13 +19,11 @@ module.exports = {
 };
 
 function body(budget) {
-  let body = [CARRY, MOVE, WORK];
-
-  while(utils.cost(body)+ BODYPART_COST[WORK] <= budget){
-    body.push(WORK);
-  }
-
-  return body;
+  return Designer.design(
+    {move:1,carry:1,work:2},
+    {move:1,carry:1,work:7},
+    budget
+  );
 }
 
 function memory(options){
@@ -49,7 +47,6 @@ function memory(options){
 };
 
 function spawn(options){
-  console.log(Designer.design([WORK],[MOVE,WORK],500))
   let spawn = Game.getObjectById(options.spawnId);
   let room = spawn.room;
   let creeps = room.find(FIND_MY_CREEPS);
