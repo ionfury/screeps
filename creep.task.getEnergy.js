@@ -8,6 +8,8 @@ function taskGetEnergy(self, options) {
   let sourceId = options.source || false;
   let container;  
   
+  let targetSource = self.memory[sourceId];
+  
   if(useContainer) {
     container = self.pos.findClosestByPath(FIND_STRUCTURES, {
       filter: s => (
@@ -24,8 +26,8 @@ function taskGetEnergy(self, options) {
   }
   
   if(container == undefined && useSource) {
-    if(sourceId) {
-      let source = Game.getObjectById(sourceId);
+    if(targetSource) {
+      let source = Game.getObjectById(targetSource);
 
       if(self.harvest(source) == ERR_NOT_IN_RANGE) {
         self.moveTo(source);

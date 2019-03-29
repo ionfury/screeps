@@ -13,7 +13,7 @@ module.exports = {
   name: name,
   body: body,
   tasks: [get, fill],
-  options: options,
+  options: memory,
   spawn: spawn
 };
 
@@ -27,27 +27,29 @@ function body(budget) {
   return body;
 }
 
-function options(options){
+function memory(options){
   let spawn = Game.getObjectById(options.spawnId);
   let room = spawn.room;
 
-  let sources = room.find(FIND_SOURCES);
+  let sources = room.find(FIND_SOURCES).map(s => s.id);
 
   let roomHarvesters = _.filter(room.find(FIND_MY_CREEPS), c => c.memory.role == name);
 
   let claimedSources = roomHarvesters.map(c => c.memory.source);
-
-  let source = sources.find(s => !_.includes(claimedSources, s));
+  
+  let source = _.difference(sources, claimedSources)[0];
 
   return { memory: 
     { 
       role: name, 
       spawnId: options.spawnId,
-      source: source.id
+      source: source
     }};
 };
 
 function spawn(options){
+    memory(options)
+    
   let spawn = Game.getObjectById(options.spawnId);
   let room = spawn.room;
   let creeps = room.find(FIND_MY_CREEPS);
