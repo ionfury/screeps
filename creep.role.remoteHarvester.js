@@ -30,7 +30,7 @@ module.exports = {
   name: name,
   body: body,
   tasks: [go, harvest, ret, store, build],
-  options: options,
+  options: memory,
   spawn: spawn
 };
 
@@ -61,18 +61,30 @@ function roomExits(room) {
   if(exits["7"] != undefined)
     dests.push(exits["7"]);
 
-    return dests;
+  return dests;
 }
 
-function options(options) {
-  let spawn = Game.getObjectById(options.spawnId);
+function memory(options) {
+  let spawnId = options.spawnId;
+  let spawn = Game.getObjectById(spawnId);
   let home = spawn.room;
   let dests = roomExits(spawn.room);
+
+  let remoteHarvesters = _.filter(Game.find(FIND_MY_CREEPS), c => 
+    c.memory.role == name 
+    && c.memory.spawnId == spawnId
+  );
+
+  //let freeRooms
+
+
+
+
 
   return { memory: 
   {
     role: name,
-    spawnId: options.spawnId,
+    spawnId: spawnId,
     home: home.name,
     target: dests[Game.time%dests.length] //get random remote room
   }};

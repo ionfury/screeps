@@ -6,10 +6,8 @@ let utils = require('constant.utilities');
 
 
 module.exports.loop = function () {
-
-  if(Game.time % 100 == 0) {
-    utils.cleanMemory();
-  }
+  utils.cleanMemory();
+  
 
 	for(let name in Game.spawns){
 		let spawn = Game.spawns[name];

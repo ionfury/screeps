@@ -1,4 +1,5 @@
 let Task = require('task');
+let Designer = require('constants.creepDesigner');
 let utils = require('constant.utilities');
 
 const name = 'harvester';
@@ -48,8 +49,7 @@ function memory(options){
 };
 
 function spawn(options){
-    memory(options)
-    
+  console.log(Designer.design([WORK],[MOVE,WORK],500))
   let spawn = Game.getObjectById(options.spawnId);
   let room = spawn.room;
   let creeps = room.find(FIND_MY_CREEPS);
