@@ -19,10 +19,17 @@ let store = new Task(4, 'storeEnergy', {structureTypes: [STRUCTURE_SPAWN,STRUCTU
   .when(s=> s.carry.energy == s.carryCapacity && s.room.name == s.memory['home'])
   .until(s=> s.carry.energy ==0);
 
+let build = new Task(5, 'build')
+  .when(s => s.carry.energy == s.carryCapacity 
+    && s.room.find(FIND_CONSTRUCTION_SITES).length > 0
+    && s.room.name == s.memory['target'])
+  .until(s => s.carry.energy == 0 
+    || s.room.find(FIND_CONSTRUCTION_SITES).length == 0)
+
 module.exports = {
   name: name,
   body: body,
-  tasks: [go, harvest, ret, store],
+  tasks: [go, harvest, ret, store, build],
   options: options,
   spawn: spawn
 };
