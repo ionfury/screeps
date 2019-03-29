@@ -24,12 +24,8 @@ module.exports = function(grunt) {
 
         // Remove all files from the dist folder.
         clean: {
-            dist: {
-                'dist': ['dist']
-            },
-            rollback: {
-                'rollback': ['rollback']
-            }
+            dist: ['dist'],
+            rollback: ['rollback']
         },
 
         // Copy all source files into the dist folder, flattening the folder structure by converting path delimiters to underscores
@@ -68,8 +64,9 @@ module.exports = function(grunt) {
         'clean:rollback',
         'copy:save', 
         'clean:dist', 
-        'copy:screeps', 
-        'screeps']);
+        'copy:screeps'//, 
+        //'screeps'
+    ]);
     grunt.registerTask('rollback', [
         'clean:dist',
         'copy:rollback',
