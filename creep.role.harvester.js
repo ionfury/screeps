@@ -3,7 +3,7 @@ let utils = require('constant.utilities');
 
 const name = 'harvester';
 
-let get = new Task(1, 'getEnergy', {useContainer: false, useSource: true})
+let get = new Task(1, 'getEnergy', {useContainer: false, useSource: true, source: 'source'})
   .while(c => c.carry.energy < c.carryCapacity);
   
 let fill = new Task(2, 'storeEnergy', {structureTypes: [STRUCTURE_CONTAINER, STRUCTURE_SPAWN]})

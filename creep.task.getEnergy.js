@@ -5,6 +5,7 @@ module.exports = {
 function taskGetEnergy(self, options) {
   let useContainer = options.useContainer || false;
   let useSource = options.useSource || true;
+  let sourceId = options.source || false;
   let container;  
   
   if(useContainer) {
@@ -23,10 +24,19 @@ function taskGetEnergy(self, options) {
   }
   
   if(container == undefined && useSource) {
-    let source = self.pos.findClosestByPath(FIND_SOURCES_ACTIVE);
-  
-    if(self.harvest(source) == ERR_NOT_IN_RANGE) {
-      self.moveTo(source);
-    }
+    if(sourceId) {
+      let source = Game.getObjectById(sourceId);
+
+      if(self.harvest(source) == ERR_NOT_IN_RANGE) {
+        self.moveTo(source);
+      }
+
+    } else {
+      let source = self.pos.findClosestByPath(FIND_SOURCES_ACTIVE);
+    
+      if(self.harvest(source) == ERR_NOT_IN_RANGE) {
+        self.moveTo(source);
+      }
+    }  
   }
 }
