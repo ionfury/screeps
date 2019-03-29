@@ -28,10 +28,22 @@ function body(budget) {
 }
 
 function options(options){
+  let spawn = Game.getObjectById(options.spawnId);
+  let room = spawn.room;
+
+  let sources = room.find(FIND_SOURCES);
+
+  let roomHarvesters = _.filter(room.find(FIND_MY_CREEPS), c => c.memory.role == name);
+
+  let claimedSources = roomHarvesters.map(c => c.memory.source);
+
+  let source = sources.find(s => !_.includes(claimedSources, s));
+
   return { memory: 
     { 
       role: name, 
-      spawnId: options.spawnId
+      spawnId: options.spawnId,
+      source: source.id
     }};
 };
 
