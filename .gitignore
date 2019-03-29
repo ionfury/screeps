@@ -1,0 +1,6 @@
+.screeps.json
+
+node_modules
+dist
+rollback
+package-lock.json
