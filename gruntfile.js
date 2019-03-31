@@ -18,14 +18,14 @@ module.exports = function(grunt) {
                 ptr: ptr
             },
             dist: {
-                src: ['dist/*.js']
+                src: ['save/*.js']
             }
         },
 
         // Remove all files from the dist folder.
         clean: {
-            dist: ['dist'],
-            rollback: ['rollback']
+            save: ['save/*'],  
+            rollback: ['rollback/*']
         },
 
         // Copy all source files into the dist folder, flattening the folder structure by converting path delimiters to underscores
@@ -36,7 +36,7 @@ module.exports = function(grunt) {
               expand: true,
               cwd: 'src/',
               src: '**',
-              dest: 'dist/',
+              dest: 'save/',
               filter: 'isFile',
               rename: function (dest, src) {
                 // Change the path name utilize underscores for folders
@@ -47,7 +47,7 @@ module.exports = function(grunt) {
           //Copy the existing 'dist' folder into the 'rollback' folder
           save: {
               expand: true,
-              cwd: 'dist/',
+              cwd: 'save/',
               src: '**',
               dest: 'rollback/'
           },
@@ -55,7 +55,7 @@ module.exports = function(grunt) {
               expand: true,
               cwd: 'rollback/',
               src: '**',
-              dest: 'dist/'
+              dest: 'save/'
           }
         },
     })
@@ -63,12 +63,12 @@ module.exports = function(grunt) {
     grunt.registerTask('default', [
         'clean:rollback',
         'copy:save', 
-        'clean:dist', 
-        'copy:screeps'//, 
-        //'screeps'
+        'clean:save', 
+        'copy:screeps', 
+        'screeps'
     ]);
     grunt.registerTask('rollback', [
-        'clean:dist',
+        'clean:save',
         'copy:rollback',
         'screeps'
     ]);

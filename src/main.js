@@ -8,7 +8,6 @@ let utils = require('constant.utilities');
 module.exports.loop = function () {
   utils.cleanMemory();
   
-hello world
 	for(let name in Game.spawns){
 		let spawn = Game.spawns[name];
 		spawnManager.run(spawn);
