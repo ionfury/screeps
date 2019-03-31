@@ -1,6 +1,5 @@
 let roleFactory = require('creep.roleFactory');
 let executionFactory = require('creep.task.executionFactory')
-let logger = require('constant.logger');
 
 module.exports = {
   run: run

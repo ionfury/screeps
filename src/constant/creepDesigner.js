@@ -22,7 +22,6 @@ function design(minimumBodyDefinition, idealBodyDefinition, energyBudget, option
     return false;
     
   let body = minimumBody;
-  console.log(queue)
   
   while(queue.length > 0) {
     let part = queue.shift();
