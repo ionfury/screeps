@@ -6,12 +6,17 @@ function taskGetEnergy(self, options) {
   let useContainer = options.useContainer || false;
   let useSource = options.useSource || true;
   let sourceId = options.source || false;
+  let containerId = options.container || false;
   let structureTypes = options.structureTypes || [STRUCTURE_STORAGE,STRUCTURE_CONTAINER];
   let container;  
   
   let targetSource = self.memory[sourceId];
   
   if(useContainer) {
+    if(containerId) {
+      self.memory.getEnergyContainer = self.memory.container[containerId];
+    }
+
     if(self.memory.getEnergyContainer == undefined) {
       let c = self.pos.findClosestByPath(FIND_STRUCTURES, {
         filter: s => _.includes(structureTypes, s.structureType)

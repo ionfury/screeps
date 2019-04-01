@@ -7,6 +7,7 @@ let all = [
   'remoteHarvester',
   'hauler',
   'harvester'
+  //'containerHarvester'
 ];
 
 module.exports = {

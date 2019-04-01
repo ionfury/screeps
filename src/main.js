@@ -1,9 +1,10 @@
 let spawnManager = require('manager.spawn');
 let creepManager = require('manager.creep');
 let constructionManager = require('manager.construction');
+let performance = require('constant.performance');
 
 let utils = require('constant.utilities');
-
+let RoleFactory = require('creep.roleFactory');
 
 function initMemory() {
   if(Memory.sourceMap == undefined) {
@@ -12,22 +13,24 @@ function initMemory() {
 }
 
 module.exports.loop = function () {
+  let factory = new RoleFactory();
+
+  if(Game.time % 100 == 0)
+    performance.report();
+
   initMemory();
 
   utils.cleanMemory();
   
 	for(let name in Game.spawns){
 		let spawn = Game.spawns[name];
-    spawnManager.run(spawn);
+    spawnManager.run(spawn, factory);
     
     if(Game.time % 100 == 0)
       planRoads(spawn.room, true);
-	}
-
-	for(let n in Game.creeps) {
-		let creep = Game.creeps[n];	
-		creepManager.run(creep);
-	}
+  }
+  
+  creepManager.run(Game.creeps, factory);
 
 	for(let n in Game.rooms) {
 		let room = Game.rooms[n];
@@ -53,13 +56,14 @@ function runTower(tower) {
   }
 
   if(tower.energy > tower.energyCapacity / 2) {
-    let damaged = tower.pos.findClosestByRange(FIND_STRUCTURES, {
-      filter: s => s.hits < s.hitsMax
-        && s.structureType != STRUCTURE_WALL 
-        && s.structureType != STRUCTURE_RAMPART
+    let roomStructures = tower.room.find(FIND_STRUCTURES, {
+      filter: s => s.structureType != STRUCTURE_WALL
+        && s.structureType != STRUCTURE_CONTROLLER
     });
-    
-    if(damaged){
+
+    let damaged = _.min(roomStructures, s => s.hits / s.hitsMax);
+  
+    if(damaged) {
       tower.repair(damaged);
     }
   }
@@ -90,8 +94,8 @@ function planRoads(home, create) {
       let remoteController = room.controller;
       let remoteSources = room.find(FIND_SOURCES);
 
-      homePaths.push(spawn.pos.findPathTo(remoteController.pos, {ignoreCreeps:true,ignoreRoads:true,swampCost:1}));
-      remotePaths.push(remoteController.pos.findPathTo(spawn.pos, {ignoreCreeps:true,ignoreRoads:true,swampCost:1}));
+     // homePaths.push(spawn.pos.findPathTo(remoteController.pos, {ignoreCreeps:true,ignoreRoads:true,swampCost:1}));
+     // remotePaths.push(remoteController.pos.findPathTo(spawn.pos, {ignoreCreeps:true,ignoreRoads:true,swampCost:1}));
 
       remoteSources.forEach(s => {
         homePaths.push(spawn.pos.findPathTo(s.pos, {ignoreCreeps:true}));
@@ -100,6 +104,7 @@ function planRoads(home, create) {
 
       if(create) {
         remotePaths.forEach(path => {
+          path.pop();path.shift();//trim ends
           path.forEach(point => room.createConstructionSite(point.x, point.y, STRUCTURE_ROAD));
         });
       
@@ -117,6 +122,7 @@ function planRoads(home, create) {
 
   if(create) {
     homePaths.forEach(path => {
+      path.pop();path.shift();//trim ends
       path.forEach(point => home.createConstructionSite(point.x, point.y, STRUCTURE_ROAD));
     });
     homePaths.forEach(p => {

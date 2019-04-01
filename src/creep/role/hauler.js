@@ -9,20 +9,21 @@ let salvage = new Task(1, 'salvage', {})
 
 let get = new Task(2, 'getEnergy', {useContainer: true, useSource:false, structureTypes: [STRUCTURE_CONTAINER]})
   .when(s => s.carry.energy < s.carryCapacity
-    && s.room.find(FIND_DROPPED_RESOURCES).length == 0)
+    && s.room.find(FIND_DROPPED_RESOURCES).length == 0
+    )
   .until(s => s.carry.energy == s.carryCapacity);
 
-let store = new Task(3, 'storeEnergy', {structureTypes: [STRUCTURE_SPAWN,STRUCTURE_EXTENSION,STRUCTURE_TOWER,STRUCTURE_STORAGE]})
+let storeSpawn = new Task(3, 'storeEnergy', {structureTypes: [STRUCTURE_SPAWN,STRUCTURE_EXTENSION]})
   .while(c => c.carry.energy > 0 && c.room.energyAvailable < c.room.energyCapacityAvailable);
 
-let upgrade = new Task(4, 'upgrade')
+let storeContainer = new Task(5, 'storeEnergy', {structureTypes: [STRUCTURE_TOWER,STRUCTURE_STORAGE]})
   .while(c => c.carry.energy > 0 && c.room.energyAvailable == c.room.energyCapacityAvailable);
 
 module.exports = {
   name: name,
   body: body,
-  tasks: [salvage, get, store, upgrade],
-  options: options,
+  tasks: [salvage, get, storeSpawn, storeContainer],
+  options: memory,
   spawn: spawn
 };
 
@@ -34,7 +35,9 @@ function body(budget) {
   );
 }
 
-function options(options){
+function memory(options){
+  //let spawn = Game.getObjectById(options.spawnId);
+  
   return { 
     memory: {
       role: name,

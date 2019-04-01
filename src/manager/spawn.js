@@ -1,14 +1,12 @@
 let logger = require('constant.logger');
 let roles = require('creep.roles');
-let roleFactory = require('creep.roleFactory');
-
 const debug = true;
 
 module.exports = {
   run: spawn  
 };
 
-function spawn(self) {
+function spawn(self, factory) {
   if(self.spawning) return;
   if(self.room.energyAvailable < 300) return;
   if(self.memory.queue == undefined) self.memory.queue = [];
@@ -16,7 +14,7 @@ function spawn(self) {
   roles.types.forEach(type => {
     try {
       
-      let role = roleFactory.create(type);
+      let role = factory.create(type);
       if(role.spawn({spawnId: self.id})) {
         let name = `${type}_${Math.random().toString(26).slice(2)}`;
         let code = self.spawnCreep(

@@ -13,6 +13,15 @@ let harvest = new Task(2, 'getEnergy', {useContainer: false, useSource: true})
   .when(s=> s.carry.energy < s.carryCapacity && s.room.name == s.memory['target'])
   .until(s=> s.carry.energy == s.carryCapacity);
 
+const repairStructureTypes = [STRUCTURE_ROAD];
+let repair = new Task(6, 'repair', {types: repairStructureTypes})
+  .while(s => s.carry.energy > 0 
+    && s.room.find(FIND_STRUCTURES, { 
+      filter: o => _.includes(repairStructureTypes, o.structureType) 
+      && (o.hits < o.hitsMax / 3)
+    }).length > 0
+    && s.room.name == s.memory['target']);
+
 let build = new Task(5, 'build')
   .when(s => s.carry.energy == s.carryCapacity 
     && s.room.find(FIND_CONSTRUCTION_SITES).length > 0
@@ -32,7 +41,7 @@ let store = new Task(4, 'storeEnergy', {structureTypes: [STRUCTURE_SPAWN,STRUCTU
 module.exports = {
   name: name,
   body: body,
-  tasks: [go, harvest, build, ret, store],
+  tasks: [go, harvest, repair, build, ret, store],
   options: memory,
   spawn: spawn
 };
