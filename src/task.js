@@ -3,8 +3,8 @@ class Task {
     this.id = id;
     this.name = name;
     this.options = options;
-    this._when = () => true;
-    this._until = () => false;
+    this._when = () => false;
+    this._until = () => true;
   }
 
   when(fn) {

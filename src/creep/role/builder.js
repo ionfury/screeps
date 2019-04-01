@@ -1,5 +1,6 @@
 let Task = require('task');
 let utils = require ('constant.utilities');
+let Designer = require('constant.creepDesigner');
 
 const name = 'builder';
 
@@ -10,12 +11,12 @@ let build = new Task(2, 'build')
   .when(s => s.carry.energy == s.carryCapacity && s.room.find(FIND_CONSTRUCTION_SITES).length > 0)
   .until(s => s.carry.energy == 0 || s.room.find(FIND_CONSTRUCTION_SITES).length == 0)
 
-
-const repairStructureTypes =  [STRUCTURE_ROAD, STRUCTURE_TOWER];
+const repairStructureTypes = [STRUCTURE_ROAD, STRUCTURE_TOWER, STRUCTURE_CONTAINER];
 let repair = new Task(3, 'repair', {types: repairStructureTypes})
   .while(s => s.carry.energy > 0 
     && s.room.find(FIND_STRUCTURES, { 
-      filter: o => o.structureType === STRUCTURE_ROAD && (o.hits < o.hitsMax / 3)
+      filter: o => _.includes(repairStructureTypes, o.structureType) 
+      && (o.hits < o.hitsMax / 3)
     }).length > 0);
 
 let upgrade = new Task(4, 'upgrade')
@@ -31,15 +32,11 @@ module.exports = {
 };
 
 function body(budget) {
-  let body = [WORK, MOVE, CARRY];
-  
-  while(utils.cost(body)+ BODYPART_COST[CARRY] + BODYPART_COST[MOVE] + BODYPART_COST[WORK] <= budget){
-    body.push(CARRY);
-    body.push(MOVE);
-    body.push(WORK);
-  }
-
-  return body;
+  return Designer.design(
+    {move:1,carry:1,work:1},
+    {move:5,carry:5,work:5},
+    budget
+  );
 }
 
 function options(options){

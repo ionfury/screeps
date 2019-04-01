@@ -7,8 +7,8 @@ function goToRoom(self, options) {
 
   if(route.length > 0) {
     let exit = self.pos.findClosestByRange(route[0].exit);
-    self.moveTo(exit);  
+    self.moveTo(exit, {reusePath: 25});  
   } else {
-    self.moveTo(self.room.controller);
+    self.moveTo(self.room.controller, {reusePath: 25});
   }
 }

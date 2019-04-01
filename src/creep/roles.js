@@ -1,11 +1,13 @@
 let all = [
   //'claimer',
   //'remoteBuilder',
-  'hauler',
- // 'remoteHarvester',
   'builder',
   'upgrader',
+  'explorer',
+  'remoteHarvester',
+  'hauler',
   'harvester'
+  //'containerHarvester'
 ];
 
 module.exports = {
