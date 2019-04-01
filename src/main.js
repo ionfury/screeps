@@ -5,12 +5,23 @@ let constructionManager = require('manager.construction');
 let utils = require('constant.utilities');
 
 
+function initMemory() {
+  if(Memory.sourceMap == undefined) {
+    Memory.sourceMap = {};
+  }
+}
+
 module.exports.loop = function () {
+  initMemory();
+
   utils.cleanMemory();
   
 	for(let name in Game.spawns){
 		let spawn = Game.spawns[name];
-		spawnManager.run(spawn);
+    spawnManager.run(spawn);
+    
+    if(Game.time % 100 == 0)
+      planRoads(spawn.room, true);
 	}
 
 	for(let n in Game.creeps) {
@@ -20,7 +31,7 @@ module.exports.loop = function () {
 
 	for(let n in Game.rooms) {
 		let room = Game.rooms[n];
-    planRoadsOnStartup(room);
+   // planRoadsOnStartup(room);
 		constructionManager.run(room);
   }
   
@@ -30,6 +41,7 @@ module.exports.loop = function () {
       runTower(structure)
     }
   }
+
 }
 
 function runTower(tower) {
@@ -51,30 +63,85 @@ function runTower(tower) {
       tower.repair(damaged);
     }
   }
-
 }
 
-function planRoadsOnStartup(room) {
-  if(room.memory.roadsPlanned == true) return;
 
-  let controller = room.controller;
-  let spawns = room.find(FIND_MY_SPAWNS);
-  let sources = room.find(FIND_SOURCES);
-  let extensions = room.find(FIND_MY_STRUCTURES, {
-    filter: s=>s.structureType == STRUCTURE_EXTENSION
+
+function planRoads(home, create) {
+  console.log('planning roads for:', home.name)
+  //if(home.memory.routesPlanned && create) return;
+  let spawn = home.find(FIND_MY_SPAWNS)[0];
+  let homeController = home.controller;
+  let homeSources = home.find(FIND_SOURCES);
+
+  let homePaths = [];
+  homePaths.push(spawn.pos.findPathTo(homeController.pos, {ignoreCreeps:true,ignoreRoads:true,swampCost:1}));
+  homeSources.forEach(s => homePaths.push(spawn.pos.findPathTo(s.pos, {ignoreCreeps:true,ignoreRoads:true,swampCost:1})));
+  
+
+  let roomNames = findRoomExits(home);
+
+  roomNames.forEach(roomName => {
+    let room = Game.rooms[roomName];
+    if(!room) return;
+    if(room.controller != undefined && (!room.controller.my || roomName == home.name)) {
+      let remotePaths = [];
+
+      let remoteController = room.controller;
+      let remoteSources = room.find(FIND_SOURCES);
+
+      homePaths.push(spawn.pos.findPathTo(remoteController.pos, {ignoreCreeps:true,ignoreRoads:true,swampCost:1}));
+      remotePaths.push(remoteController.pos.findPathTo(spawn.pos, {ignoreCreeps:true,ignoreRoads:true,swampCost:1}));
+
+      remoteSources.forEach(s => {
+        homePaths.push(spawn.pos.findPathTo(s.pos, {ignoreCreeps:true}));
+        remotePaths.push(s.pos.findPathTo(spawn.pos, {ignoreCreeps:true}));
+      });
+
+      if(create) {
+        remotePaths.forEach(path => {
+          path.forEach(point => room.createConstructionSite(point.x, point.y, STRUCTURE_ROAD));
+        });
+      
+        remotePaths.forEach(p => {
+          new RoomVisual(roomName).poly(p, {stroke:'green'})
+        });
+      }
+      else {
+        remotePaths.forEach(p => {
+          new RoomVisual(roomName).poly(p, {stroke:'red'})
+        });
+      }
+    }
   });
 
-  let paths = [];
+  if(create) {
+    homePaths.forEach(path => {
+      path.forEach(point => home.createConstructionSite(point.x, point.y, STRUCTURE_ROAD));
+    });
+    homePaths.forEach(p => {
+      new RoomVisual(home.name).poly(p, {stroke:'green'});
+    });
+  }
+  else {
+    homePaths.forEach(p => {
+      new RoomVisual(home.name).poly(p, {stroke:'red'});
+    });
+  }
+}
 
-  spawns.forEach(spawn => {
-    Array.prototype.push.apply(paths, (spawn.pos.findPathTo(controller.pos)));
 
-    Array.prototype.push.apply(paths, sources.forEach(source => spawn.pos.findPathTo(source.pos)));
+
+function findRoomExits(room) {
+  let exits = Game.map.describeExits(room.name);
+
+  let names = [];
+
+  _.forEach(['1', '3', '5', '7'], i => {
+    if(exits[i] != undefined)
+      names.push(exits[i]);
   });
-  
-  let uniquePositions = [...new Set(paths.map(p => { return {x:p.x, y:p.y}}))];
-  
-  uniquePositions.forEach(p => room.createConstructionSite(p.x, p.y, STRUCTURE_ROAD));
 
-  room.memory.roadsPlanned = true;
+
+  return names;
 }

@@ -1,5 +1,6 @@
 let Task = require('task');
 let utils = require('constant.utilities');
+let Designer = require('constant.creepDesigner');
 
 const name = 'upgrader';
 
@@ -18,15 +19,11 @@ module.exports = {
 };
 
 function body(budget) {
-  let body = [WORK, MOVE, CARRY];
-  
-  while(utils.cost(body)+ BODYPART_COST[CARRY] + BODYPART_COST[MOVE] + BODYPART_COST[WORK] <= budget){
-    body.push(CARRY);
-    body.push(MOVE);
-    body.push(WORK);
-  }
-
-  return body;
+  return Designer.design(
+    {move:1,carry:1,work:2},
+    {move:5,carry:5,work:5},
+    budget
+  );
 }
 
 function options(options){

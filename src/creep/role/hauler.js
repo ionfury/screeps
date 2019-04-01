@@ -29,7 +29,7 @@ module.exports = {
 function body(budget) {
   return Designer.design(
     {move:1,carry:1,work:1},
-    {move:10,carry:10,work:1},
+    {move:5,carry:5,work:1},
     budget
   );
 }

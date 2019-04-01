@@ -40,7 +40,7 @@ function taskGetEnergy(self, options) {
       }
     }
   }
-  
+
   if(container == undefined && useSource) {
     if(targetSource) {
       let source = Game.getObjectById(targetSource);
