@@ -9,12 +9,12 @@ function taskGetEnergy(self, options) {
   let containerId = options.container || false;
   let structureTypes = options.structureTypes || [STRUCTURE_STORAGE,STRUCTURE_CONTAINER];
   let container;  
-  
+
   let targetSource = self.memory[sourceId];
   
   if(useContainer) {
     if(containerId) {
-      self.memory.getEnergyContainer = self.memory.container[containerId];
+      self.memory.getEnergyContainer = self.memory[containerId];
     }
 
     if(self.memory.getEnergyContainer == undefined) {
