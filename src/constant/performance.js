@@ -7,18 +7,25 @@ const LOG_SIZE = 30;
 
 function log(task, cpu) {
   if(Memory.performance == undefined)
-    Memory.performance = {};
+    {Memory.performance = {};}
   
   if(Memory.performance.log == undefined) 
-    Memory.performance.log = {};
+    {Memory.performance.log = {};}
 
   if(Memory.performance.log[task] == undefined)
-    Memory.performance.log[task] = [];
+    {Memory.performance.log[task] = [];}
+
+  if(Memory.performance.callCount == undefined)
+    {Memory.performance.callCount = {};}
+
+  if(Memory.performance.callCount[task] == undefined)
+    {Memory.performance.callCount[task] = [];}
 
   if(Memory.performance.log[task].length > LOG_SIZE)
-    Memory.performance.log[task].shift();
+    {Memory.performance.log[task].shift();}
 
   Memory.performance.log[task].push(cpu);
+ // Memory.performance.callCount[task]++;
 }
 
 function report() {

@@ -2,7 +2,11 @@ module.exports = {
   run: build
 }
 
-function build(self, options) {
+function build(self, options = {}) {
+  if(options.buildId) {
+    self.memory.buildTarget = self.memory[options.buildId];
+  }
+
   if(self.memory.buildTarget == undefined) {
     let site = self.pos.findClosestByPath(FIND_CONSTRUCTION_SITES);
 
@@ -21,10 +25,17 @@ function build(self, options) {
         self.moveTo(site);
         break;
       case ERR_INVALID_TARGET:
-        self.memory.buildTarget = null;
+        self.memory.buildTarget = undefined;
+        if(options.buildId) {
+          self.memory[options.buildId] = undefined;
+        }
+        break;
     }
   }
   else {
     self.memory.buildTarget = undefined;
+    if(options.buildId) {
+      self.memory[options.buildId] = undefined;
+    }
   }
 }

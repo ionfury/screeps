@@ -3,11 +3,12 @@ let all = [
   //'remoteBuilder',
   'builder',
   'upgrader',
-  'explorer',
-  'remoteHarvester',
+  //'explorer',
+  //'remoteHarvester',
   'hauler',
-  'harvester'
-  //'containerHarvester'
+  //'harvester'
+  'containerHauler',
+  'containerHarvester'
 ];
 
 module.exports = {

@@ -22,7 +22,7 @@ let repair = new Task(6, 'repair', {types: repairStructureTypes})
     }).length > 0
     && s.room.name == s.memory['target']);
 
-let build = new Task(5, 'build')
+let build = new Task(5, 'build',{})
   .when(s => s.carry.energy == s.carryCapacity 
     && s.room.find(FIND_CONSTRUCTION_SITES).length > 0
     && s.room.name == s.memory['target'])
@@ -126,7 +126,6 @@ function adjRoomNames(room) {
     if(exits[i] != undefined)
       names.push(exits[i]);
   });
-
 
   return names;
 }

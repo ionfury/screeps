@@ -4,12 +4,18 @@ module.exports = {
 
 function taskStoreEnergy(creep, options) {
   let structureTypes = options.structureTypes || [STRUCTURE_SPAWN];
-
-  let structure = creep.pos.findClosestByPath(FIND_STRUCTURES, {
-    filter: (s) => (s.energy < s.energyCapacity
-      || (s.store !== undefined ? s.store[RESOURCE_ENERGY] : 0) < s.storeCapacity)
-      && _.includes(structureTypes, s.structureType)
-  });
+  
+  let structure;
+  if(options.containerId) {
+    structure = Game.getObjectById(creep.memory[options.containerId]);
+  } 
+  else {
+    structure = creep.pos.findClosestByPath(FIND_STRUCTURES, {
+      filter: (s) => (s.energy < s.energyCapacity
+        || (s.store !== undefined ? s.store[RESOURCE_ENERGY] : 0) < s.storeCapacity)
+        && _.includes(structureTypes, s.structureType)
+    });
+  }
 
   if(structure == undefined) {
     structure = creep.room.storage;

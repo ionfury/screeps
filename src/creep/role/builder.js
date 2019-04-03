@@ -57,5 +57,5 @@ function spawn(options){
     .map(c => c.memory.role)
     .reduce((acc, role) => (acc[role] = (acc[role] || 0) + 1, acc), {});
   let count = creepsInRoom[name] || 0;
-  return count < 2;
+  return count < 1;
 }

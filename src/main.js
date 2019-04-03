@@ -2,15 +2,10 @@ let spawnManager = require('manager.spawn');
 let creepManager = require('manager.creep');
 let constructionManager = require('manager.construction');
 let performance = require('constant.performance');
+let roomMemory = require('constant.staticRoomMemory')
 
 let utils = require('constant.utilities');
 let RoleFactory = require('creep.roleFactory');
-
-function initMemory() {
-  if(Memory.sourceMap == undefined) {
-    Memory.sourceMap = {};
-  }
-}
 
 module.exports.loop = function () {
   let factory = new RoleFactory();
@@ -18,9 +13,14 @@ module.exports.loop = function () {
   if(Game.time % 100 == 0)
     performance.report();
 
-  initMemory();
-
   utils.cleanMemory();
+  
+	for(let n in Game.rooms) {
+		let room = Game.rooms[n];
+   // planRoadsOnStartup(room);
+    roomMemory.save(room);
+		//constructionManager.run(room);
+  }
   
 	for(let name in Game.spawns){
 		let spawn = Game.spawns[name];
@@ -31,12 +31,6 @@ module.exports.loop = function () {
   }
   
   creepManager.run(Game.creeps, factory);
-
-	for(let n in Game.rooms) {
-		let room = Game.rooms[n];
-   // planRoadsOnStartup(room);
-		constructionManager.run(room);
-  }
   
   for(let n in Game.structures) {
     let structure = Game.structures[n];
@@ -44,7 +38,6 @@ module.exports.loop = function () {
       runTower(structure)
     }
   }
-
 }
 
 function runTower(tower) {
@@ -56,9 +49,19 @@ function runTower(tower) {
   }
 
   if(tower.energy > tower.energyCapacity / 2) {
+    let ramparts = tower.room.find(FIND_STRUCTURES, {
+      filter: s => s.structureType == STRUCTURE_RAMPART
+        && s.hits < 300000
+    });
+
+    if(ramparts) {
+      tower.repair(ramparts[0]);
+    }
+
     let roomStructures = tower.room.find(FIND_STRUCTURES, {
       filter: s => s.structureType != STRUCTURE_WALL
         && s.structureType != STRUCTURE_CONTROLLER
+        && s.structureType != STRUCTURE_RAMPART
     });
 
     let damaged = _.min(roomStructures, s => s.hits / s.hitsMax);
@@ -91,7 +94,7 @@ function planRoads(home, create) {
     if(room.controller != undefined && (!room.controller.my || roomName == home.name)) {
       let remotePaths = [];
 
-      let remoteController = room.controller;
+      //let remoteController = room.controller;
       let remoteSources = room.find(FIND_SOURCES);
 
      // homePaths.push(spawn.pos.findPathTo(remoteController.pos, {ignoreCreeps:true,ignoreRoads:true,swampCost:1}));
