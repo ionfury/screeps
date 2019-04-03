@@ -2,7 +2,7 @@ module.exports = {
   run: build
 }
 
-function build(self, options) {
+function build(self, options = {}) {
   if(options.buildId) {
     self.memory.buildTarget = self.memory[options.buildId];
   }
