@@ -19,9 +19,10 @@ function save(room) {
       }
     }
   });
+  
   Memory.StaticRoomMemory[room.name] = {
     id: room.id,
-    owner: room.controller.owner,
+  //  owner: room.controller.owner,
     sources: sources
   };
 }

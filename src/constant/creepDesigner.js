@@ -3,7 +3,7 @@ module.exports = {
 }
 
 function design(minimumBodyDefinition, idealBodyDefinition, energyBudget, options) {
-  let possibleParts = BODYPARTS_ALL;
+  let possibleParts = [TOUGH,WORK,CARRY,CLAIM,MOVE,ATTACK,RANGED_ATTACK,HEAL];
   let minimumBody = [];
   let queue = [];
     

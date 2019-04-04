@@ -1,12 +1,10 @@
 let all = [
-  //'claimer',
-  //'remoteBuilder',
+  'harasser',
+  'remoteDefender',
   'builder',
   'upgrader',
   //'explorer',
-  //'remoteHarvester',
   'hauler',
-  //'harvester'
   'containerHauler',
   'containerHarvester'
 ];

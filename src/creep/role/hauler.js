@@ -25,7 +25,7 @@ module.exports = {
 function body(budget) {
   return Designer.design(
     {move:1,carry:1,work:0},
-    {move:3,carry:3,work:0},
+    {move:5,carry:5,work:0},
     budget
   );
 }

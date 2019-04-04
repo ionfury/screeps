@@ -1,3 +1,5 @@
+const profiler = require('profiler');
+
 class TaskFactory {
   constructor() {
     this._taskCache = {};
@@ -6,7 +8,8 @@ class TaskFactory {
   create(taskName) {
     if(this._taskCache[taskName] == undefined) {
       let task = require(`creep.task.${taskName}`);
-      this._taskCache[taskName] = new TaskExecution(taskName, task.run);
+      let fn = profiler.registerFN(task.run, taskName);
+      this._taskCache[taskName] = new TaskExecution(taskName, fn);
     }
 
     return this._taskCache[taskName];

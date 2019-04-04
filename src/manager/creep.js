@@ -1,12 +1,9 @@
-let TaskFactory = require('creep.taskFactory')
-let performance = require('constant.performance');
-
 module.exports = {
   run: run
 }
 
-function run(creeps, roleFactory) {
-  let taskFactory = new TaskFactory();
+function run(roleFactory, taskFactory) {
+  let creeps = Game.creeps;
   for(let n in creeps) {
     let creep = creeps[n];
     handle(creep, roleFactory, taskFactory);
@@ -53,11 +50,7 @@ function handle(creep, roleFactory, taskFactory) {
     //run task
     if(taskId) {
       let execution = taskFactory.create(task.name);
-      let start = Game.cpu.getUsed();
       execution.run(creep, options);
-      let finish = Game.cpu.getUsed();
-
-      performance.log(task.name, (finish-start));
     }
     else {
       creep.say("Idle");
