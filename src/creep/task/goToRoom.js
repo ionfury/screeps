@@ -3,7 +3,8 @@ module.exports = {
 }
 
 function goToRoom(self, options) {
-  self.moveTo(new RoomPosition(25, 25, self.memory[options.destination]), 
+  self.say('🚐');
+  let code = self.moveTo(new RoomPosition(15, 15, self.memory[options.destination]), 
     {
       reusePath:25,
       visualizePathStyle: {stroke: 'red'}

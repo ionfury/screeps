@@ -3,6 +3,7 @@ module.exports = {
 }
 
 function defend(self, options = {}) {
+  self.say('⚔️');
   let style={
     stroke: '#red',
     strokeWidth: .15
@@ -19,9 +20,16 @@ function defend(self, options = {}) {
     });
     let target = hostilesByRange[0];
 
-    if(self.attack(target) == ERR_NOT_IN_RANGE) {
+    let attackCode = self.rangedAttack(target)
+    if(attackCode == ERR_NOT_IN_RANGE) {
       self.moveTo(target,{visualizePathStyle:style});
       self.heal(self);
+    }
+    else if(attackCode == ERR_NO_BODYPART){
+      if(self.attack(target) == ERR_NOT_IN_RANGE) {
+        self.moveTo(target);
+        self.heal(self);
+      }
     }
   }
   else {
@@ -40,6 +48,10 @@ function defend(self, options = {}) {
       let structure = byRange[0];
       if (self.attack(structure) == ERR_NOT_IN_RANGE) {
         self.moveTo(structure,{visualizePathStyle:style});
+        self.attack(structure);
+      }
+      else if (self.rangedAttack(structure) == ERR_NOT_IN_RANGE) {
+        self.moveTo(structure);
         self.attack(structure);
       }
     }

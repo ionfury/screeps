@@ -3,6 +3,7 @@ module.exports = {
 };
 
 function bindMemory(self, options) {
+  self.say('💭');
   let addr = options.addr || null;
   let expr = options.expr || null;
 

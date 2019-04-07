@@ -25,9 +25,10 @@ const BIND_CONTAINER_CONSTRUCTION_EXPR = (c) => {
   else return x.id;
 }
 const BIND_CONTAINER_EXPR = (c) => {
-  let x = c.pos.findInRange(FIND_STRUCTURES, 2, {
+  let inRange = c.pos.findInRange(FIND_STRUCTURES, 3, {
     filter: s => _.includes(BIND_STRUCTURE_TYPES, s.structureType)    
-  })[0];
+  });
+  let x = _.min(inRange, container => c.pos.getRangeTo(container));
   if(!x) return undefined;
   else return x.id;
 }

@@ -3,6 +3,7 @@ module.exports = {
 }
 
 function repair(self, options) {
+  self.say('🛠️')
   let repair;
 
   if(options.repairId) {
@@ -10,7 +11,7 @@ function repair(self, options) {
   }
   else {
     repair = self.pos.findClosestByRange(FIND_STRUCTURES, {
-      filter: o => options.types.includes(o.structureType) && (o.hits < o.hitsMax / 3)
+      filter: s => s.hits < s.hitsMax/2
     });
   }
 

@@ -7,7 +7,7 @@ const FLAG_NAME = 'Harass';
 
 
 let go = new Task(10, 'goToRoom', {destination: TARGET_ROOM_NAME_ADDR})
-  .while(s => s.room.name != s.memory[TARGET_ROOM_NAME_ADDR]);
+  .while(s => false);//s.room.name != s.memory[TARGET_ROOM_NAME_ADDR]);
 
 let attack = new Task(20, 'defendRoom')
   .while(s => s.room.name === s.memory[TARGET_ROOM_NAME_ADDR]);
@@ -31,8 +31,8 @@ function spawn(options) {
 
 function body(budget) {
   return Designer.design(
-    {move:6,attack:3},
-    {move:6,attack:3},
+    {move:6,ranged_attack:3},
+    {move:6,ranged_attack:3},
     budget
   );
 }

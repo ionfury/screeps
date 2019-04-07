@@ -3,6 +3,7 @@ module.exports = {
 }
 
 function explore(self, options) {
+  self.say('🛰️')
   initMemory();
 
   self.moveTo(self.room.controller);

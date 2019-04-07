@@ -3,6 +3,7 @@ module.exports = {
 }
 
 function taskGetEnergy(self, options) {
+
   let useContainer = options.useContainer || false;
   let useSource = options.useSource || true;
   let sourceId = options.source || false;
@@ -13,6 +14,7 @@ function taskGetEnergy(self, options) {
   let targetSource = self.memory[sourceId];
   
   if(useContainer) {
+    
     if(containerId) {
       self.memory.getEnergyContainer = self.memory[containerId];
     }
@@ -30,6 +32,7 @@ function taskGetEnergy(self, options) {
   
     container = Game.getObjectById(self.memory.getEnergyContainer);
     if(container != undefined) {
+      self.say('🐿️')
       let code = self.withdraw(container, RESOURCE_ENERGY);
   
       switch(code) {
@@ -47,6 +50,7 @@ function taskGetEnergy(self, options) {
   }
 
   if(container == undefined && useSource) {
+    self.say('⛏️');
     if(targetSource) {
       let source = Game.getObjectById(targetSource);
 

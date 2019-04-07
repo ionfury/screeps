@@ -3,6 +3,7 @@ module.exports = {
 }
 
 function goHome(self, options) {
+  self.say('🏚️')
   let home = Game.getObjectById(self.memory.spawnId).room;
   
   let route = Game.map.findRoute(self.room, home);

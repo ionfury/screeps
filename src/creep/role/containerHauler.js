@@ -18,14 +18,29 @@ let transfer = new Task(20, 'getEnergy', {container:CONTAINER_ID_MEM_ADDR,useCon
   .while(c => c.carry.energy < c.carryCapacity
     && c.room.name == c.memory[SOURCE_ROOM_NAME_ADDR]);
 
-const repairStructureTypes = [STRUCTURE_ROAD];
-let repair = new Task(25, 'repair', {types: repairStructureTypes})
-  .while(s => s.carry.energy > 0 
+const maintainStructureTypes = [STRUCTURE_ROAD];
+let repair = new Task(25, 'repair', {types: maintainStructureTypes})
+  .when(s => s.carry.energy > 0 
     && s.room.find(FIND_STRUCTURES, { 
-      filter: o => _.includes(repairStructureTypes, o.structureType) 
+      filter: o => _.includes(maintainStructureTypes, o.structureType) 
       && (o.hits < o.hitsMax / 3)
     }).length > 0
-    && s.room.name != s.memory[HOME_ROOM_NAME_ADDR]);
+    && s.room.name != s.memory[HOME_ROOM_NAME_ADDR])
+  .until(s => s.carry.energy == 0
+    || s.room.find(FIND_STRUCTURES, {
+      filter: o => 
+        _.includes(maintainStructureTypes, o.structureType) 
+        && (o.hits < o.hitsMax / 2)
+      }).length == 0
+    );
+
+const roadFilter = s => s.structureType == STRUCTURE_ROAD;
+let build = new Task(28, 'build', {buildFilter: roadFilter})
+  .while(c => c.carry.energy > 0
+    && c.room.find(FIND_CONSTRUCTION_SITES, {
+      filter: roadFilter
+    }).length > 0
+    && c.room.name != c.memory[HOME_ROOM_NAME_ADDR]);
 
 let goHome = new Task(30, 'goToRoom', {destination: HOME_ROOM_NAME_ADDR })
   .while(c => c.carry.energy == c.carryCapacity
@@ -57,10 +72,22 @@ function spawn(options) {
   return unboundContainer != undefined;
 }
 
-function body(budget) {
+function body(budget, spawn) {
+  let myBody;
+
+  let container = getUnboundContainerNear(spawn);
+  
+  if(container.room.name == spawn.room.name) {
+    myBody = {move:6,carry:3,work:1}
+  }
+  else
+  {
+    myBody = {move:11,carry:6,work:1}
+  }
+
   return Designer.design(
     {move:2,carry:2,work:1},
-    {move:5,carry:5,work:1},
+    myBody,
     budget
   )
 }
@@ -68,7 +95,7 @@ function body(budget) {
 module.exports = {
   name: CREEP_ROLE,
   body: body,
-  tasks: [go, transfer, repair, goHome, store],
+  tasks: [go, transfer, repair, build, goHome, store],
   options: remember,
   spawn: spawn
 }
@@ -95,7 +122,7 @@ function getUnboundContainerNear(spawn) {
 }
 
 function nobodyOn(containerId, remote) {
-  let max = remote ? 2 : 1;
+  let max = 1;//remote ? 2 : 1;
   let on = _.filter(Game.creeps, c => 
     c.memory.role == CREEP_ROLE
     && c.memory[CONTAINER_ID_MEM_ADDR] == containerId);

@@ -3,19 +3,20 @@ module.exports = {
 }
 
 function build(self, options = {}) {
+  let buildFilter = options.buildFilter || ((s) => true);
+  let site;
+
+  self.say('⚒️')
   if(options.buildId) {
-    self.memory.buildTarget = self.memory[options.buildId];
+    site = Game.getObjectById(self.memory[options.buildId]);
   }
 
-  if(self.memory.buildTarget == undefined) {
-    let site = self.pos.findClosestByPath(FIND_CONSTRUCTION_SITES);
-
-    if(site != undefined) {
-      self.memory.buildTarget = site.id;
-    }
+  if(site == undefined) {
+    site = self.pos.findClosestByPath(FIND_CONSTRUCTION_SITES, {
+      filter: buildFilter
+    });
   }
-
-  let site = Game.getObjectById(self.memory.buildTarget);
+  
   if(site != undefined) {
     
     let code = self.build(site);
@@ -33,7 +34,6 @@ function build(self, options = {}) {
     }
   }
   else {
-    self.memory.buildTarget = undefined;
     if(options.buildId) {
       self.memory[options.buildId] = undefined;
     }

@@ -1,7 +1,8 @@
 let spawnManager = require('manager.spawn');
 let creepManager = require('manager.creep');
 let towerManager = require('manager.tower');
-let roomMemory = require('constant.staticRoomMemory')
+let roomMemory = require('constant.staticRoomMemory');
+let stats = require('stats.grafana');
 
 let utils = require('constant.utilities');
 let RoleFactory = require('creep.roleFactory');
@@ -12,12 +13,9 @@ function f(d) {
   return parseFloat(Math.round(d * 100) / 100).toFixed(2);
 }
 
-//profiler.enable();
+profiler.enable();
 module.exports.loop = function () {
   profiler.wrap(() => {
-
-    let zero =Game.cpu.getUsed();
-
 
     let roleFactory = new RoleFactory();
     let taskFactory = new TaskFactory();
@@ -30,15 +28,14 @@ module.exports.loop = function () {
       roomMemory.save(room);
       //constructionManager.run(room);
     }  
-  let a = Game.cpu.getUsed();
-    spawnManager.run(roleFactory);
-  let b = Game.cpu.getUsed();
-    creepManager.run(roleFactory, taskFactory);
-  let c = Game.cpu.getUsed();
-    towerManager.run();
-  let d = Game.cpu.getUsed();
     
-    console.log(f(d-zero),'startup:',f(a-zero),'spawn:',f(b-a),'creep:',f(c-b),'tower:',f(d-c))
+    spawnManager.run(roleFactory);
+    creepManager.run(roleFactory, taskFactory);
+    towerManager.run();
+    
+  
+  stats.gather();
+   // console.log(f(d-zero),'startup:',f(a-zero),'spawn:',f(b-a),'creep:',f(c-b),'tower:',f(d-c))
   });
 }
 
