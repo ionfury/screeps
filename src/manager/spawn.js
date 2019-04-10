@@ -11,8 +11,8 @@ function run(factory) {
     let spawn = Game.spawns[n];
     handle(spawn, factory);
 
-    if(Game.time % 100 == 0)
-      planRoads(spawn.room, true);
+   // if(Game.time % 100 == 0)
+   //   planRoads(spawn.room, true);
   }
 }
 

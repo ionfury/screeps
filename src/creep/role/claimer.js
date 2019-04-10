@@ -3,37 +3,50 @@ let utils = require ('constant.utilities');
 
 const name = 'claimer';
 
-let getEnergy = new Task(1, 'getEnergy', {useContainer: true, useSource: true})
-  .when(c => c.carry.energy < c.carryCapacity && c.room.name == c.memory['home'])
-  .until(c => c.carry.energy == c.carryCapacity);
-
-let go = new Task(2, 'goToRoom', {destination: 'target'})
-  .when(c => c.carry.energy == c.carryCapacity && c.room.name != [c.memory['target']])
+let go = new Task(10, 'goToRoom', {destination: 'target'})
+  .when(c => c.room.name != c.memory['target'])
   .until(c => c.room.name == c.memory['target']);
-  //.until(c => c.pos.findPathTo(Game.rooms[c.memory['target']].controller).length > 0)
 
 let claim = new Task(3, 'claim')
-  .when(c => c.carry.energy == c.carryCapacity 
-    && c.room.name == c.memory['target'])
-  .until(c => c.carry.energy == 0
-    || Game.rooms[c.memory['target']].my)
+  .when(c=> c.room.name == c.memory['target'] && !c.room.controller.my)
+  .until(c=> c.room.controller.my);
 
-let home = new Task(4, 'goHome')
-  .when(c => c.carry.energy == 0
-    && c.room.name == c.memory['target'])
-  .until(c => c.room.name == Game.getObjectById(self.memory.spawnId).room.name)
+
+let getEnergy = new Task(1, 'getEnergy', {useContainer: true, useSource: true})
+  .when(c => c.carry.energy < c.carryCapacity && c.room.name == c.memory['target'])
+  .until(c => c.carry.energy == c.carryCapacity);
+  
+let build = new Task(2, 'build')
+  .when(s => s.carry.energy == s.carryCapacity 
+    && s.room.find(FIND_CONSTRUCTION_SITES).length > 0
+    && s.room.name == s.memory['target']) 
+  .until(s => s.carry.energy == 0 
+    || s.room.find(FIND_CONSTRUCTION_SITES).length == 0);
+
+
+
 
 module.exports = {
   name: name,
   body: body,
-  tasks: [getEnergy, go, claim, home],
+  tasks: [go, claim, getEnergy, build],
   options: options,
   spawn: spawn
 }
 
 function body(budget) {
-  let body = [WORK, MOVE, CARRY, CLAIM];
+  let room = Game.rooms[Game.flags.Claim.pos.roomName];
+  let body = [WORK,WORK,WORK,WORK,WORK,WORK, MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE, CARRY,CARRY,CARRY];
   
+  if(!room.controller.my) 
+  {
+    console.log('spawning claimer')
+  }
+  else
+  {
+    console.log('spawning claim builder');
+  }
+
 
   return body;
 }
@@ -58,6 +71,6 @@ function spawn(options) {
   let creeps = Game.creeps;
   let claimers = _.filter(creeps, c => c.memory.role === 'claimer');
   
-  return false//claimers.length < 1;
+  return claimers.length < 1;
 }
 

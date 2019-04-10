@@ -78,11 +78,11 @@ function body(budget, spawn) {
   let container = getUnboundContainerNear(spawn);
   
   if(container.room.name == spawn.room.name) {
-    myBody = {move:6,carry:3,work:1}
+    myBody = {move:3,carry:5,work:1}
   }
   else
   {
-    myBody = {move:11,carry:6,work:1}
+    myBody = {move:6,carry:11,work:1}
   }
 
   return Designer.design(

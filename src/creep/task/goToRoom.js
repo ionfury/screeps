@@ -4,6 +4,8 @@ module.exports = {
 
 function goToRoom(self, options) {
   self.say('🚐');
+  self.heal(self);
+
   let code = self.moveTo(new RoomPosition(15, 15, self.memory[options.destination]), 
     {
       reusePath:25,

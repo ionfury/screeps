@@ -148,8 +148,11 @@ function adjRoomNames(room) {
   if(!exits) return names;
 
   _.forEach(['1', '3', '5', '7'], i => {
-    if(exits[i] != undefined)
-      names.push(exits[i]);
+    if(exits[i] != undefined) {
+      if(exits[i] && exits[i] != 'E34N14') {
+        names.push(exits[i]);
+      }
+    }
   });
 
   return names;
