@@ -25,6 +25,9 @@ function setupProfiler() {
     background(filter) {
       setupMemory('background', false, filter);
     },
+    gather() {
+      setupMemory('gather', 1);
+    },
     restart() {
       if (Profiler.isProfiling()) {
         const filter = Memory.profiler.filter;
@@ -169,7 +172,7 @@ function profileObjectFunctions(object, label) {
 }
 
 function profileFunction(fn, functionName) {
-  const fnName = functionName || fn.name;
+  const fnName = functionName.replace('.','-') || fn.name;
   if (!fnName) {
     console.log('Couldn\'t find a function name for - ', fn);
     console.log('Will not profile this function.');
@@ -341,10 +344,19 @@ module.exports = {
     enabled = true;
     hookUpPrototypes();
   },
-
+  enabled() {
+    return enabled;
+  },
   output: Profiler.output,
-
+  gather() {
+    if(enabled) {
+      setupMemory('gather', 1);
+    }
+  },
   registerObject: profileObjectFunctions,
   registerFN: profileFunction,
   registerClass: profileObjectFunctions,
+  export() {
+    Memory.stats.metrics = Memory.profiler;
+  }
 };

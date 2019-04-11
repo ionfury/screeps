@@ -1,4 +1,3 @@
-let colonyManager = require('manager.colony');
 let bus = require('messaging.bus');
 
 const myControllers = (s) => s.structureType == STRUCTURE_CONTROLLER && s.my;
@@ -10,9 +9,6 @@ module.exports = {
 
 function run() {
   console.log('managing empire')
-  let colonies = _.filter(Game.structures, myControllers).map(c => c.room);
-  
-  _.forEach(colonies, colonyManager.run);
 
 }
 /*

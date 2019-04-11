@@ -1,4 +1,4 @@
-let Task = require('task');
+let Task = require('creep.task');
 let utils = require ('constant.utilities');
 
 const name = 'claimer';

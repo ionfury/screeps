@@ -1,4 +1,4 @@
-let Task = require('task');
+let Task = require('creep.task');
 let Designer = require('constant.creepDesigner');
 
 const CREEP_ROLE = 'harasser';

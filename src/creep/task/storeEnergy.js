@@ -3,6 +3,7 @@ module.exports = {
 }
 
 function storeEnergy(creep, options) {
+  creep.say('⚡');
   let structureTypes = options.structureTypes || [STRUCTURE_SPAWN];
   let container;
 

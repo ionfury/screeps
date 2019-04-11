@@ -8,7 +8,8 @@ module.exports = {
   publish: publish,
   listen: listen,
   search: search,
-  bind: bind
+  bind: bind,
+  length: length
 };
 
 function init() {
@@ -17,6 +18,10 @@ function init() {
   }
 
   BUS = Memory.bus;
+}
+
+function length(queueName) {
+  return BUS[ADDR(queueName)].queue.length;
 }
 
 function publish(queueName, message) {
@@ -35,7 +40,7 @@ function pushQueue(queueName, message) {
 
   if(BUS[ADDR(queueName)].queue.length > BUS[ADDR(queueName)].length) {
     let lost = BUS[ADDR(queueName)].queue.pop();
-    console.log(`ERR Queue: ${queueName} overflow!  Dropping message: ${lost}`);
+   // console.log(`ERR Queue: ${queueName} overflow!  Dropping message: ${lost}`);
   }
 
   BUS[ADDR(queueName)].queue.push(message);
@@ -55,7 +60,8 @@ function bind(queueName, callback, options = {}) {
   if(!BUS[ADDR(queueName)]) startQueue(queueName);
   let msg = listen(queueName);
 
-  return callback(msg, options);
+  if(msg)
+    return callback(msg, options);
 }
 
 function search(queueName) {

@@ -1,12 +1,33 @@
 let bus = require('messaging.bus');
+let process = require('system.process');
+
+const PRIORITY = 10;
+const PROCESS_NAME = 'Colony.Run';
+
+const nonDefenseDamagedStructure = s => 
+  s.structureType != STRUCTURE_WALL
+  && s.structureType != STRUCTURE_CONTROLLER
+  && s.structureType != STRUCTURE_RAMPART
+  && s.hits < s.hitsMax - 100;
 
 module.exports = {
-  run: (colony) => {
-    init(colony);
+  tasks: () => {
+    let processes = [];
 
-    bus.bind(`colony/${colony.name}/addSource`, bindRemoteRoom, {self:colony});
+    for(let t in Game.rooms) {
+      let room = Game.rooms[t];
+      if(room.controller && room.controller.my) {
+        processes.push(process(PROCESS_NAME, PRIORITY, () => handle(room)));
+      }
+    }
 
+    return processes;
   }
+}
+
+function handle(colony) {
+  init(colony);
+  publishRepair(colony, nonDefenseDamagedStructure);
 }
 
 // Initalize all accessed memory structures in this colony
@@ -18,8 +39,31 @@ function init(colony) {
   };
 }
 
-function bindRemoteRoom(message, options) {
-  if(!Memory.colony.remoteRooms) Memory.colony.remoteHarvestingRooms = [];
+function publishHostiles(colony) {
+  let hostiles = colony.room.find(FIND_HOSTILE_CREEPS);
 
-  Memory.colony.remoteHarvestingRooms.push(message.roomName);
+  holstiles.forEach(hostile => bus.publish(`colony/${colony.name}/hostiles`,{target:hostile.id}));
 }
+
+
+function publishRepair(colony, filter) {
+  let name = `colony/${colony.name}/repair`;
+  if(bus.length(name) < 10) {
+    let structures = colony.find(FIND_STRUCTURES, {
+      filter: filter
+    });
+    structures.forEach(s => {
+      console.log(colony.name, s.id, s.hits, s.hitsMax)
+      bus.publish(`colony/${colony.name}/repair`,{target:s.id})
+
+    });
+  }
+}
+
+/*
+function bindRemoteRoom(context, options) {
+  if(!Memory.colony[options.self.name].remoteRooms) Memory.colony[options.self.name].remoteRooms = [];
+
+  Memory.colony[options.self.name].remoteRooms.push(context.message.name);
+}
+*/

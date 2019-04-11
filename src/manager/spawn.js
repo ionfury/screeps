@@ -1,30 +1,47 @@
+let process = require('system.process');
+
+let dependency = require('system.dependency');
 let logger = require('constant.logger');
 let roles = require('creep.roles');
 const debug = false;
 
+const PROCESS_NAME = 'Spawn.Run';
+const PRIORITY = 10;
+
 module.exports = {
-  run: run  
+  run: run,
+  tasks: tasks
 };
 
-function run(factory) {
+function tasks() {
+  let processes = [];
+
   for(let n in Game.spawns) {
     let spawn = Game.spawns[n];
-    handle(spawn, factory);
+    processes.push(process(PROCESS_NAME, PRIORITY, () => handle(spawn)));
+  }
 
-   // if(Game.time % 100 == 0)
-   //   planRoads(spawn.room, true);
+  return processes;
+}
+
+function run() {
+  for(let n in Game.spawns) {
+    let spawn = Game.spawns[n];
+    handle(spawn);
   }
 }
 
-function handle(self, factory) {
+function handle(self) {
   if(self.spawning) return;
   if(self.room.energyAvailable < 300) return;
   if(self.memory.queue == undefined) self.memory.queue = [];
 
   roles.types.forEach(type => {
-    try {
+    if(self.name == 'Spawn3' && type=='remoteDefender'){
+    }
+    else {
       
-      let role = factory.create(type);
+      let role = dependency.roleFactory.create(type);
       if(role.spawn({spawnId: self.id})) {
         let name = `${type}_${Math.random().toString(26).slice(2)}`;
         let code = self.spawnCreep(
@@ -41,13 +58,11 @@ function handle(self, factory) {
             logger.notify(`${self.name} not enough energy to spawn`,{write:debug});
             break;
           default:
+          console.log(type);
             logger.notify(`${self.name}: `, {code: code})
             break;
         }
       }
-    }
-    catch (ex) {
-      console.log(`"${self.name}" exception spawning "${type}"`, ex);
     }
   });
 }

@@ -6,8 +6,8 @@ let all = [
   'upgrader',
   //'explorer',
   'hauler',
-  'containerHauler',
-  'containerHarvester'
+  'containerHarvester',
+  'containerHauler'
 ];
 
 module.exports = {
